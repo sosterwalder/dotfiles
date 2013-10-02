@@ -1,4 +1,64 @@
+ set nocompatible               " be iMproved
+ filetype off                   " required!
+
+ set rtp+=~/.vim/bundle/vundle/
+ call vundle#rc()
+
+" let Vundle manage Vundle
+" required! 
+Bundle 'gmarik/vundle'
+
+" My Bundles here:
+"
+" original repos on github
+Bundle 'tpope/vim-fugitive'
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
+Bundle 'tpope/vim-rails.git'
+" vim-scripts repos
+Bundle 'L9'
+Bundle 'FuzzyFinder'
+" non github repos
+Bundle 'git://git.wincent.com/command-t.git'
+
+Bundle 'scrooloose/nerdtree'
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'davidhalter/jedi-vim'
+Bundle 'klen/python-mode'
+
+filetype plugin indent on     " required!
+
+set background=dark
+colorscheme solarized
+
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set expandtab
+set autoindent
+set smartindent
 syntax on
 
-" Wrap gitcommit file types at the appropriate length
-filetype indent plugin on
+" Pythonmode settings
+let g:pymode_lint_checker             = "pylint,pyflakes,pep8"
+let g:pymode_lint_ignore              = "E203,E272,E221,E251,E202,E271,C0302,W0511,F0401"
+let g:pymode_folding = 0
+
+" GVIM
+set guioptions-=m   " Remove menu bar
+set guioptions-=T   " Remove toolbar
+set guioptions-=r   " Remove right-hand scroll bar
+set guioptions-=l   " Remove left-hand scroll bar
+
+" Set working directory to the current file
+" (http://vim.wikia.com/wiki/Set_working_directory_to_the_current_file)
+autocmd BufEnter * silent! lcd %:p:h
+
+"" Key mappings
+" Toggle NERDTree with F2
+" (http://www.catonmat.net/blog/vim-plugins-nerdtree-vim/)
+map <F2> :NERDTreeToggle<CR>
+
+" Move tabs with alt + left|right
+nnoremap <silent> <A-Left> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
+nnoremap <silent> <A-Right> :execute 'silent! tabmove ' . tabpagenr()<CR>
