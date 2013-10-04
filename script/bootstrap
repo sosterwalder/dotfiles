@@ -49,7 +49,9 @@ setup_gitconfig () {
 }
 
 init_submodules () {
+    info "Initializing submodules"
     git submodule update --init
+    info "Finished initializing submodules"
 }
 
 link_files () {
