@@ -5,8 +5,8 @@
 # This creates a symlink for rc.lua depending on the dotfile
 # created with script/bootstrap.
 
-source_file="~/.rc.lua"
-target_dir="~/.config/awesome"
+source_file="$HOME/.rc.lua"
+target_dir="$HOME/.config/awesome"
 target="rc.lua"
 
 set -e
@@ -40,8 +40,8 @@ mkdir -p $target_dir
 success "Created directory '$target_dir'"
 
 # Create symlink
-info "Creating symlink from '${source_dir}' to '${target_dir}/${target}'"
-ln -sf $source_dir "${target_dir}/${target}"
-success "Created symlink from '${source_dir}' to '${target_dir}/${target}'"
+info "Creating symlink from '${source_file}' to '${target_dir}/${target}'"
+ln -sf $source_file "${target_dir}/${target}"
+success "Created symlink from '${source_file}' to '${target_dir}/${target}'"
 
 success 'Finished installing awesome config'
