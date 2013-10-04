@@ -2,6 +2,8 @@
 #
 # Run all dotfiles installers.
 
+search_path="$HOME/.dotfiles"
+
 set -e
 
 echo ''
@@ -29,8 +31,8 @@ fail () {
 
 info "Running all dotfiles installers."
 
-info "Changing directory to $(dirname $)/.."
-cd "$(dirname $)"/..
+info "Changing directory to $search_path"
+cd $search_path
 
 info "Finding installers and running them"
 # find the installers and run them iteratively
