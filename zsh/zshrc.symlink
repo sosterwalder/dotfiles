@@ -111,6 +111,9 @@ fi
 # load .zshrc.pre to give the user the chance to overwrite the defaults
 [[ -r ${ZDOTDIR:-${HOME}}/.zshrc.pre ]] && source ${ZDOTDIR:-${HOME}}/.zshrc.pre
 
+# Start tmux
+if [ "$TMUX" = "" ]; then tmux; fi
+
 # check for version/system
 # check for versions (compatibility reasons)
 is4(){
