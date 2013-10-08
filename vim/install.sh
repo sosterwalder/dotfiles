@@ -33,13 +33,19 @@ fail () {
 }
 
 # Create directory if it doesn't exist
+
 info "Creating directory '$target_dir' if it doesn't exist"
 mkdir -p $target_dir
 success "Created directory '$target_dir'"
 
 # Create symlink for Vundle
-info "Creating symlink for vundle from '${source_dir}' to '${target_dir}'"
-ln -sf $source_dir "$target_dir/."
-success "Created symlink for vundle from '${source_dir}' to '${target_dir}'"
+if [ -d "$target_dir/vundle" ]
+then
+    info "Creating symlink for vundle from '${source_dir}' to '${target_dir}'"
+    ln -sf $source_dir "$target_dir/vundle"
+    success "Created symlink for vundle from '${source_dir}' to '${target_dir}'"
+else
+    info "Skipped symlink for vundle, existing"
+fi
 
 success 'Finished installing vundle'
