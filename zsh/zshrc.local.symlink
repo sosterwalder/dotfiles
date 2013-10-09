@@ -330,4 +330,6 @@ fi
 #vimpm ()      { vim `perldoc -l $1 | sed -e 's/pod$/pm/'` }
 #vimhelp ()    { vim -c "help $1" -c on -c "au! VimEnter *" }
 
+export PATH=$PATH:$HOME/bin
+
 ## END OF FILE #################################################################
