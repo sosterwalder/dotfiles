@@ -1,17 +1,11 @@
-# sosterwalder does dotfiles (forked from holman does dotfiles)
+# sosterwalder does dotfiles
 
 ## dotfiles
 
 Your dotfiles are how you personalize your system. These are mine.
 
-I was a little tired of having long alias files and everything strewn about
-(which is extremely common on other dotfiles projects, too). That led to this
-project being much more topic-centric. I realized I could split a lot of things
-up into the main areas I used (Ruby, git, system libraries, and so on), so I
-structured the project accordingly.
-
 If you're interested in the philosophy behind why projects like these are
-awesome, you might want to [read my post on the
+awesome, you might want to [read the post from zach holman on the
 subject](http://zachholman.com/2010/08/dotfiles-are-meant-to-be-forked/).
 
 ## install
@@ -19,13 +13,14 @@ subject](http://zachholman.com/2010/08/dotfiles-are-meant-to-be-forked/).
 Run this:
 
 ```sh
-git clone https://github.com/holman/dotfiles.git ~/.dotfiles
+git clone https://github.com/sosterwalder/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
+git submodule update --init
 script/bootstrap
 script/install
 ```
 
-This will symlink the appropriate files in `.dotfiles` to your home directory.
+This will symlink the appropriate files in `.dotfiles` to your home directory and install the necessary files.
 Everything is configured and tweaked within `~/.dotfiles`.
 
 The main file you'll want to change right off the bat is `zsh/zshrc.symlink`,
