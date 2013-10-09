@@ -2,32 +2,15 @@
 #
 # Run all dotfiles installers.
 
+# Includes
+source "$HOME/.dotfiles/script/helpers.sh"
+
+# Variables
 search_path="$HOME/.dotfiles"
 
 set -e
 
 echo ''
-
-info () {
-  printf "  [ \033[00;34m..\033[0m ] $1"
-  echo ''
-}
-
-user () {
-  printf "\r  [ \033[0;33m?\033[0m ] $1 "
-  echo ''
-}
-
-success () {
-  printf "\r\033[2K  [ \033[00;32mOK\033[0m ] $1\n"
-  echo ''
-}
-
-fail () {
-  printf "\r\033[2K  [\033[0;31mFAIL\033[0m] $1\n"
-  echo ''
-  exit
-}
 
 info "Running all dotfiles installers."
 
