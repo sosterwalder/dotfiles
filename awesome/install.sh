@@ -5,43 +5,32 @@
 # This creates a symlink for rc.lua depending on the dotfile
 # created with script/bootstrap.
 
-source_file="$HOME/.rc.lua"
+# Includes
+source "$HOME/.dotfiles/script/helpers.sh"
+
+# Variables
+source_dir="$HOME/.dotfiles/awesome"
+source_file1="blingbling"
+source_dir2=$HOME
+source_file2=".rc.lua"
 target_dir="$HOME/.config/awesome"
-target="rc.lua"
+target_file="rc.lua"
 
 set -e
 
-echo ''
-
-info () {
-  printf "  [ \033[00;34m..\033[0m ] $1"
-  echo ''
-}
-
-user () {
-  printf "\r  [ \033[0;33m?\033[0m ] $1 "
-  echo ''
-}
-
-success () {
-  printf "\r\033[2K  [ \033[00;32mOK\033[0m ] $1\n"
-  echo ''
-}
-
-fail () {
-  printf "\r\033[2K  [\033[0;31mFAIL\033[0m] $1\n"
-  echo ''
-  exit
-}
+# Check if source_dir exists
+if ! [ -d $source_dir ]
+then
+    fail "Directory '$source_dir' not existing. Are the git submodules initialized?"
+fi
 
 # Create directory if it doesn't exist
-info "Creating directory '$target_dir' if it doesn't exist"
-mkdir -p $target_dir
-success "Created directory '$target_dir'"
+create_directory $target_dir
 
-# Create symlink
-info "Creating symlink from '${source_file}' to '${target_dir}/${target}'"
-ln -sf $source_file "${target_dir}/${target}"
-success "Created symlink from '${source_file}' to '${target_dir}/${target}'"
+# Create symlink for rc.lua
+create_symlink $source_dir $source_file1 $target_dir $source_file1
+
+# Create symlink for blingbling
+create_symlink $source_dir2 $source_file2 $target_dir $target_file
 
 success 'Finished installing awesome config'
