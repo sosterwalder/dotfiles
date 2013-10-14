@@ -10,6 +10,9 @@ local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
+-- Own libs
+-- run_once function - place callees at the bottom of rc..
+require("lib/run_once")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -135,9 +138,33 @@ end
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {}
+tags.settings = {}
+tags.settings.names = {}
+tags.settings.layout = {}
+
+tags = {
+    settings = {
+        {
+            names   = { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+            layout  = {
+                layouts[1],
+                layouts[10],
+                layouts[1],
+                layouts[1],
+                layouts[1],
+                layouts[1],
+                layouts[1],
+                layouts[1],
+                layouts[1]
+            }
+        }
+    }
+}
+
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
+    --tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1]) 
+    tags[s] = awful.tag(tags.settings[1].names, s, tags.settings[1].layout)
 end
 -- }}}
 
@@ -493,4 +520,8 @@ end)
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+
+-- Run these apps once
+run_once ("~/.screenlayout/default.sh")
+run_once ("parcellite")
 -- }}}
