@@ -18,6 +18,7 @@ Bundle 'tpope/vim-rails.git'
 " vim-scripts repos
 Bundle 'L9'
 Bundle 'FuzzyFinder'
+Bundle 'EasyGrep' 
 " non github repos
 Bundle 'git://git.wincent.com/command-t.git'
 
@@ -49,6 +50,9 @@ set guioptions-=m   " Remove menu bar
 set guioptions-=T   " Remove toolbar
 set guioptions-=r   " Remove right-hand scroll bar
 set guioptions-=l   " Remove left-hand scroll bar
+                                        
+" Easygrep
+let g:EasyGrepCommand=1
 
 " Set working directory to the current file
 " (http://vim.wikia.com/wiki/Set_working_directory_to_the_current_file)
