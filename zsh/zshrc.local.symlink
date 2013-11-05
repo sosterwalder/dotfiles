@@ -331,5 +331,6 @@ fi
 #vimhelp ()  ***REMOVED*** vim -c "help $1" -c on -c "au! VimEnter *" }
 
 export PATH=$PATH:$HOME/bin
+export PATH="/usr/lib/colorgcc/bin:$PATH"
 
 ## END OF FILE #################################################################
