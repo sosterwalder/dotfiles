@@ -66,3 +66,11 @@ map <F2> :NERDTreeToggle<CR>
 " Move tabs with alt + left|right
 nnoremap <silent> <A-Left> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
 nnoremap <silent> <A-Right> :execute 'silent! tabmove ' . tabpagenr()<CR>
+
+" Disable arrow keys
+" http://vimcasts.org/blog/2013/02/habit-breaking-habit-making/
+noremap h <NOP>
+noremap j <NOP>
+noremap k <NOP>
+noremap l <NOP>
+
