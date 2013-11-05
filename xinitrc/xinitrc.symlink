@@ -14,8 +14,10 @@ fi
 # Autostart
 # Not here.. find it in ~/.config/awesome/rc.lua
 
+# Set Synaptics options
+
 # exec gnome-session
 # exec startkde
 # exec startxfce4
 # ...or the Window Manager of your choice
-exec awesome
+exec dbus-launch awesome
