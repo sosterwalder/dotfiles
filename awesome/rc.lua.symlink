@@ -569,4 +569,5 @@ run_once("/usr/bin/nm-applet")
 run_once("/usr/bin/pnmixer")
 run_once("~/.screenlayout/default.sh")
 run_once("parcellite")
+run_once("easystroke")
 -- }}}
