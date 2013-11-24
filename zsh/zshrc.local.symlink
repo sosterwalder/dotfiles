@@ -333,4 +333,8 @@ fi
 export PATH=$PATH:$HOME/bin
 export PATH="/usr/lib/colorgcc/bin:$PATH"
 
+# Stuff for P2P-MPI
+export P2PMPI_HOME=/opt/p2pmpi
+export PATH=$PATH:$P2PMPI_HOME/bin
+
 ## END OF FILE #################################################################
