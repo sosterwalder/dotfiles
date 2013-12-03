@@ -479,13 +479,29 @@ awful.rules.rules = {
       properties = { tag = tags[1][6], floating = false } },    
 }
 
--- Spotify
 local screen_to_add = 1
 if screen.count() > 1 then
     screen_to_add = 2
 end
-rule = { rule = { class = "Spotify" }, properties = { tag = tags[screen_to_add][7], floating = false } }
+
+-- Spotify
+rule = { 
+    rule = { class = "Spotify" }, 
+    properties = { 
+        tag = tags[screen_to_add][7], floating = false 
+    } 
+}
 table.insert(awful.rules.rules, rule)
+
+-- Clementine
+rule = { 
+    rule = { class = "Clementine" }, 
+    properties = { 
+        tag = tags[screen_to_add][7], floating = false 
+    } 
+}
+table.insert(awful.rules.rules, rule)
+
 screen_to_add = nil
 
 -- }}}
