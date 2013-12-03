@@ -563,7 +563,8 @@ client.connect_signal("focus", function(c) c.border_color = beautiful.border_foc
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 
 -- Run these apps once - also called autostart
-run_once("/usr/bin/optirun /usr/bin/xscreensaver -nosplash")
+run_once("/usr/bin/xscreensaver -nosplash")
+run_once("/usr/bin/compton -bcCGf -D2")
 run_once("/usr/bin/nm-applet")
 run_once("/usr/bin/pnmixer")
 run_once("~/.screenlayout/default.sh")
