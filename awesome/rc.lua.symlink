@@ -587,5 +587,5 @@ run_once("~/.screenlayout/default.sh")
 run_once("parcellite")
 run_once("/usr/bin/easystroke")
 run_once("xfce4-power-manager")
-run_once("/usr/bin/compton -bcCGf -D1 --shadow-exclude 'n:w:*easystroke*'")
+--run_once("/usr/bin/compton -bcCGf -D1 --shadow-exclude 'n:w:*easystroke*'")
 -- }}}
