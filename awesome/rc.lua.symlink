@@ -15,8 +15,10 @@ local gears = require("gears")
 local awful = require("awful")
 awful.rules = require("awful.rules")
 require("awful.autofocus")
+local lain = require("lain")
 -- Widget and layout library
 local wibox = require("wibox")
+local vicious = require("vicious")
 -- Theme handling library
 local beautiful = require("beautiful")
 -- Notification library
@@ -25,6 +27,8 @@ local menubar = require("menubar")
 -- Own libs
 -- run_once function - place callees at the bottom of rc..
 require("lib/run_once")
+
+local configdir = awful.util.getdir("config")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -81,12 +85,18 @@ end
 
 
 -- Themes define colours, icons, and wallpapers
-beautiful.init("/usr/share/awesome/themes/default/theme.lua")
+--beautiful.init("/usr/share/awesome/themes/zenburn/theme.lua")
+beautiful.init(configdir .. "/themes/powerarrow-darker/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "lilyterm"
+terminal = "roxterm"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
+
+-- System menu items--{{{
+shutdowncmd = "sudo shutdown -hP now"
+restartcmd  = "sudo reboot"
+--}}}
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -109,7 +119,8 @@ local layouts =
     awful.layout.suit.spiral.dwindle,
     awful.layout.suit.max,
     awful.layout.suit.max.fullscreen,
-    awful.layout.suit.magnifier
+    awful.layout.suit.magnifier,
+    lain.layout.uselesstile
 }
 -- }}}
 
@@ -157,17 +168,18 @@ tags.settings.layout = {}
 tags = {
     settings = {
         {
-            names   = { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+            --names   = { '1 ⎈⚫', '2 ✎⚫', '3 ☏⚫', '4 ⇵⚫', '5 ⎆⚫',  '6 ⛃⚫', '7 ♫⚫', '8 ✵‡', 9 },
+            names = { 1, 'www', 'mail/im', 4, 'office/reading', 6, 7, '✎', 9 }, 
             layout  = {
-                layouts[1],
-                layouts[10],
-                layouts[1],
-                layouts[1],
-                layouts[1],
-                layouts[1],
-                layouts[1],
-                layouts[1],
-                layouts[1]
+                layouts[13],    -- 1
+                layouts[10],    -- 2
+                layouts[1],     -- 3
+                layouts[1],     -- 4
+                layouts[10],    -- 5
+                layouts[1],     -- 6
+                layouts[10],    -- 7
+                layouts[10],    -- 8
+                layouts[1]      -- 9
             }
         }
     }
@@ -180,21 +192,53 @@ for s = 1, screen.count() do
 end
 -- }}}
 
--- {{{ Menu
--- Create a laucher widget and a main menu
-myawesomemenu = {
-   { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awesome.conffile },
-   { "restart", awesome.restart },
-   { "quit", awesome.quit }
+--{{{ Menu
+--{{{ Session Menu
+shutdownmenu = {
+  	{ "shutdown", shutdowncmd },
+    { "reboot", restartcmd },
+    { "logout", awesome.quit }
 }
-
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "open terminal", terminal }
+--}}}
+--{{{ File Managers Menu
+fm_menu = {
+    { "thunar", "thunar" },
+}
+--}}}
+--{{{ Browsers Menu
+browsers_menu = {
+    { "firefox", "firefox" },
+}
+--}}}
+--{{{ Utils Menu
+utils_menu = {
+}
+--}}}
+--{{{ Editors Menu
+editors = {
+    { "emacs", "emacs" },
+    { "gvim", "gvim" }
+}
+--}}}
+--{{{ Main Menu
+mymainmenu = awful.menu({ items = { { "terminal", terminal },
+									{ "editors", editors },
+                                    { "fileman", fm_menu },
+                                    { "browsers", browsers_menu },
+									{ "utils", utils_menu },
+									{ "system", shutdownmenu, beautiful.widget_st }
                                   }
                         })
+--}}}
+--}}}
 
-mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
+-- {{{ Menu Launcher
+--n2ilauncher = awful.widget.launcher({ image = image(beautiful.n2i), menu = mymainmenu })
+-- }}}
+
+-- {{{ Menu
+-- Create a laucher widget and a main menu
+mylauncher = awful.widget.launcher({ image = beautiful.n2i,
                                      menu = mymainmenu })
 
 -- Menubar configuration
@@ -204,12 +248,77 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 -- {{{ Wibox
 -- Create a textclock widget
 mytextclock = awful.widget.textclock()
+local clock_widget = wibox.widget.background()
+clock_widget:set_widget(mytextclock)
+clock_widget:set_bg("#313131")
+
+-- Keyboard map indicator and changer
+kbdcfg = {}
+kbdcfg.cmd = "setxkbmap"
+kbdcfg.layout = { { "us", "intl" }, { "de", "ch" } }
+kbdcfg.current = 1  -- us is our default layout
+kbdcfg.widget = wibox.widget.textbox()
+kbdcfg.widget:set_text(" " .. kbdcfg.layout[kbdcfg.current][1] .. " ")
+kbdcfg.switch = function ()
+  kbdcfg.current = kbdcfg.current % #(kbdcfg.layout) + 1
+  local t = kbdcfg.layout[kbdcfg.current]
+  kbdcfg.widget:set_text(" " .. t[1] .. " ")
+  os.execute( kbdcfg.cmd .. " " .. t[1] .. " " .. t[2] )
+end
+ -- Mouse bindings
+kbdcfg.widget:buttons(
+ awful.util.table.join(awful.button({ }, 1, function () kbdcfg.switch() end))
+)
+local kbdwidget = wibox.widget.background()
+kbdwidget:set_widget(kbdcfg.widget)
+kbdwidget:set_bg("#313131")
+
+-- WIDGETS
+-- OS info
+syswidget = wibox.widget.textbox()
+vicious.register(syswidget, vicious.widgets.os, "$1 $2")
+
+-- CPU widget (graph)
+-- Icon
+cpuicon = wibox.widget.imagebox(beautiful.widget_cpu)
+-- Percentage
+cpuwidget = wibox.widget.background(lain.widgets.cpu({
+    settings = function()
+        widget:set_text(" " .. cpu_now.usage .. "% ")
+    end
+}), "#313131")
+-- Meter
+cpubar = awful.widget.progressbar()
+cpubar:set_width(50)
+cpubar:set_height(8)
+cpubar:set_vertical(false)
+cpubar:set_background_color("#313131")
+cpubar:set_color(beautiful.bg_urgent )
+vicious.register(cpubar, vicious.widgets.cpu, "$1", 7)
+-- Cache that shit
+vicious.cache(vicious.widgets.cpu)
+
+-- Memory widget (textbox)
+-- Initialize widget
+memwidget = wibox.widget.textbox()
+-- Register widget
+vicious.register(memwidget, vicious.widgets.mem, "$1% ($2MB/$3MB)", 13)
+
+-- Separators
+spr = wibox.widget.textbox(' ')
+arrl = wibox.widget.imagebox()
+arrl:set_image(beautiful.arrl)
+arrl_dl = wibox.widget.imagebox()
+arrl_dl:set_image(beautiful.arrl_dl)
+arrl_ld = wibox.widget.imagebox()
+arrl_ld:set_image(beautiful.arrl_ld)
 
 -- Create a wibox for each screen and add it
 mywibox = {}
 mypromptbox = {}
 mylayoutbox = {}
 mytaglist = {}
+mytag = {}
 mytaglist.buttons = awful.util.table.join(
                     awful.button({ }, 1, awful.tag.viewonly),
                     awful.button({ modkey }, 1, awful.client.movetotag),
@@ -256,6 +365,7 @@ mytasklist.buttons = awful.util.table.join(
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
     mypromptbox[s] = awful.widget.prompt()
+
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
     -- We need one layoutbox per screen.
     mylayoutbox[s] = awful.widget.layoutbox(s)
@@ -264,6 +374,7 @@ for s = 1, screen.count() do
                            awful.button({ }, 3, function () awful.layout.inc(layouts, -1) end),
                            awful.button({ }, 4, function () awful.layout.inc(layouts, 1) end),
                            awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)))
+
     -- Create a taglist widget
     mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
 
@@ -275,14 +386,28 @@ for s = 1, screen.count() do
 
     -- Widgets that are aligned to the left
     local left_layout = wibox.layout.fixed.horizontal()
-    left_layout:add(mylauncher)
+    left_layout:add(spr)
     left_layout:add(mytaglist[s])
     left_layout:add(mypromptbox[s])
+    left_layout:add(spr)
 
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
+    right_layout:add(spr)
+    right_layout:add(arrl)
+    right_layout:add(arrl_ld)
+    right_layout:add(cpuicon)
+    right_layout:add(cpuwidget)
+    right_layout:add(arrl_dl)
+    right_layout:add(memwidget)
+    right_layout:add(arrl_ld)
+    right_layout:add(kbdwidget)
+    right_layout:add(arrl_dl)
     if s == 1 then right_layout:add(wibox.widget.systray()) end
-    right_layout:add(mytextclock)
+    right_layout:add(arrl_ld)
+    right_layout:add(clock_widget)
+    right_layout:add(spr)
+    right_layout:add(arrl_ld)
     right_layout:add(mylayoutbox[s])
 
     -- Now bring it all together (with the tasklist in the middle)
@@ -352,7 +477,9 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "n", awful.client.restore),
 
     -- Prompt
-    awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
+    --awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
+    --awful.key({ modkey },            "r",     function () awful.util.spawn("/usr/bin/fehlstart") end),
+
 
     awful.key({ modkey }, "x",
               function ()
@@ -476,7 +603,17 @@ awful.rules.rules = {
       properties = { tag = tags[1][8], floating = false } },
 
     { rule = { class = "KeePass2" },
-      properties = { tag = tags[1][6], floating = false } },    
+      properties = { tag = tags[1][6], floating = false } },
+
+    { rule = { class = "Zathura" },
+      properties = { tag = tags[1][5], floating = false } },
+
+    { rule = { class = "libreoffice-impress" },
+      properties = { tag = tags[1][5], floating = false } },
+
+    { rule = { class = "Eclipse" },
+      properties = { tag = tags[1][8], floating = false } },
+
 }
 
 local screen_to_add = 1
@@ -575,10 +712,11 @@ client.connect_signal("manage", function (c, startup)
     end
 end)
 
-client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
+client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 
 -- Run these apps once - also called autostart
+run_once("/usr/bin/fehlstart")
 run_once("/usr/bin/xscreensaver -nosplash")
 run_once("/usr/bin/nm-applet")
 run_once("/usr/bin/pnmixer")
@@ -586,5 +724,6 @@ run_once("~/.screenlayout/default.sh")
 run_once("parcellite")
 run_once("/usr/bin/easystroke")
 run_once("xfce4-power-manager")
---run_once("/usr/bin/compton -bcCGf -D1 --shadow-exclude 'n:w:*easystroke*'")
+run_once("/usr/bin/compton --config /home/sosterwalder/.config/compton.conf -bcCGf -D1")
+run_once("setxkbmap -model pc105 -layout us -variant intl")
 -- }}}
