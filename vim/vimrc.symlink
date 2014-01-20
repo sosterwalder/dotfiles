@@ -56,6 +56,10 @@ set guioptions-=l   " Remove left-hand scroll bar
 " Easygrep
 let g:EasyGrepCommand=1
 
+" Latex
+set grepprg=grp\ -nH\ $*
+let g:tex_flavor = "latex"
+
 " Set working directory to the current file
 " (http://vim.wikia.com/wiki/Set_working_directory_to_the_current_file)
 autocmd BufEnter * silent! lcd %:p:h
