@@ -291,7 +291,7 @@ sessionid=
 
 [Spotify]
 username=sven.osterwalder@gmail.com
-password=
+password=bfi2svos
 bitrate=2
 volume_normalisation=true
 login_state=1
@@ -480,6 +480,7 @@ download_dir=/home/sosterwalder/Podcasts
 auto_download=false
 delete_after=0
 gpodder_device_name=Clementine on progression
+last_full_update=@Variant(\0\0\0\x10\0%|X\x4\x89\x8d\x3\0)
 
 [Visualisations]
 geometry=@ByteArray(\x1\xd9\xd0\xcb\0\x1\0\0\0\0\a\xdf\xff\xff\xff\xff\0\0\v&\0\0\x4\x5\0\0\a\xe0\0\0\0\0\0\0\v%\0\0\x4\x4\0\0\0\x1\0\0)
