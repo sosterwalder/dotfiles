@@ -12,6 +12,7 @@ source "$HOME/.dotfiles/script/helpers.sh"
 source_dir="$HOME/.dotfiles/awesome"
 source_file1="blingbling"
 source_file11="lib"
+source_file12="themes"
 source_dir2=$HOME
 source_file2=".rc.lua"
 target_dir="$HOME/.config/awesome"
@@ -32,6 +33,8 @@ create_directory $target_dir
 create_symlink $source_dir $source_file1 $target_dir $source_file1
 # Create symlink for lib
 create_symlink $source_dir $source_file11 $target_dir $source_file11
+# Create symlink for themes
+create_symlink $source_dir $source_file12 $target_dir $source_file12
 
 # Create symlink for rc.lua
 create_symlink $source_dir2 $source_file2 $target_dir $target_file
