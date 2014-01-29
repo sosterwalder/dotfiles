@@ -13,15 +13,27 @@ servers = (
     port = "6667";
     use_ssl = "no";
     ssl_verify = "no";
+  },
+  {
+    address = "irc.topaxi.ch";
+    chatnet = "home";
+    port = "6679";
+    use_ssl = "yes";
+    ssl_verify = "no";
   }
 );
 
-chatnets = { adsy = { type = "IRC"; }; cajoue = { type = "IRC"; }; };
+chatnets = {
+  adsy = { type = "IRC"; };
+  cajoue = { type = "IRC"; };
+  home = { type = "IRC"; };
+};
 
 channels = (
   { name = "#adsybla"; chatnet = "adsy"; autojoin = "Yes"; },
   { name = "#devs"; chatnet = "adsy"; autojoin = "Yes"; },
-  { name = "#irrenhaus"; chatnet = "cajoue"; autojoin = "Yes"; }
+  { name = "#irrenhaus"; chatnet = "cajoue"; autojoin = "Yes"; },
+  { name = "#home"; chatnet = "home"; autojoin = "Yes"; }
 );
 
 aliases = {
