@@ -2820,6 +2820,7 @@ alias da='du -sch'
 alias j='jobs -l'
 #vim/gvim
 alias vim='gvim'
+alias svim='sudo gvim -u ~/.vimrc'
 
 # listing stuff
 #a2# Execute \kbd{ls -lSrah}

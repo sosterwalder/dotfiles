@@ -336,4 +336,8 @@ export PATH="/usr/lib/colorgcc/bin:$PATH"
 # Stuff for P2P-MPI
 export P2PMPI_HOME=/opt/p2pmpi
 export PATH=$PATH:$P2PMPI_HOME/bin
+
+# Powerline
+. /usr/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh
+
 ## END OF FILE #################################################################
