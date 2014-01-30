@@ -41,7 +41,7 @@ _arguments \
   '(--cache)--cache[brew cache]' \
   '*:: :->subcmds' && return 0
 
-if (( CURRENT == 1 )***REMOVED*** then
+if (( CURRENT == 1 )); then
   _describe -t commands "brew subcommand" _1st_arguments
   return
 fi

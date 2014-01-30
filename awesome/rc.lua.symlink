@@ -2,7 +2,7 @@
 --
 -- Reminder(s) to myself:
 --
--- Printing stuff (like tables***REMOVED*** Reuqires penlight ->
+-- Printing stuff (like tables); Reuqires penlight ->
 -- yaourt -S lua-penlight
 -- 
 -- local pprint = require 'pl.pretty'
@@ -182,13 +182,13 @@ end
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {}
-tags.***REMOVED***}
+tags.settings = {}
 tags.settings.names = {}
 tags.settings.layout = {}
 
 tags = {
-    ***REMOVED***
-      ***REMOVED***
+    settings = {
+        {
             --names   = { '1 ⎈⚫', '2 ✎⚫', '3 ☏⚫', '4 ⇵⚫', '5 ⎆⚫',  '6 ⛃⚫', '7 ♫⚫', '8 ✵‡', 9 },
             names = { 1, 'www', 'mail/im', 4, 'office/reading', 6, 7, '✎', 9 }, 
             layout  = {
@@ -201,9 +201,9 @@ tags = {
                 layouts[10],    -- 7
                 layouts[10],    -- 8
                 layouts[1]      -- 9
-          ***REMOVED***
-      ***REMOVED***
-  ***REMOVED***
+            }
+        }
+    }
 }
 
 for s = 1, screen.count() do
@@ -217,18 +217,18 @@ end
 --{{{ Session Menu
 shutdownmenu = {
   	{ "shutdown", shutdowncmd },
-  ***REMOVED*** "reboot", restartcmd },
-  ***REMOVED*** "logout", awesome.quit }
+    { "reboot", restartcmd },
+    { "logout", awesome.quit }
 }
 --}}}
 --{{{ File Managers Menu
 fm_menu = {
-  ***REMOVED*** "thunar", "thunar" },
+    { "thunar", "thunar" },
 }
 --}}}
 --{{{ Browsers Menu
 browsers_menu = {
-  ***REMOVED*** "firefox", "firefox" },
+    { "firefox", "firefox" },
 }
 --}}}
 --{{{ Utils Menu
@@ -237,19 +237,19 @@ utils_menu = {
 --}}}
 --{{{ Editors Menu
 editors = {
-  ***REMOVED*** "emacs", "emacs" },
-  ***REMOVED*** "gvim", "gvim" }
+    { "emacs", "emacs" },
+    { "gvim", "gvim" }
 }
 --}}}
 --{{{ Main Menu
 mymainmenu = awful.menu({ items = { { "terminal", terminal },
 									{ "editors", editors },
-                                  ***REMOVED*** "fileman", fm_menu },
-                                  ***REMOVED*** "browsers", browsers_menu },
+                                    { "fileman", fm_menu },
+                                    { "browsers", browsers_menu },
 									{ "utils", utils_menu },
 									{ "system", shutdownmenu, beautiful.widget_st }
-                                ***REMOVED***
-                      ***REMOVED***)
+                                  }
+                        })
 --}}}
 --}}}
 
@@ -532,29 +532,29 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
-    awful.key({ modkey,         ***REMOVED*** "Left",   awful.tag.viewprev       ),
-    awful.key({ modkey,         ***REMOVED*** "Right",  awful.tag.viewnext       ),
-    awful.key({ modkey,         ***REMOVED*** "Escape", awful.tag.history.restore),
+    awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
+    awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
+    awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
 
-    awful.key({ modkey,         ***REMOVED*** "j",
+    awful.key({ modkey,           }, "j",
         function ()
             awful.client.focus.byidx( 1)
             if client.focus then client.focus:raise() end
         end),
-    awful.key({ modkey,         ***REMOVED*** "k",
+    awful.key({ modkey,           }, "k",
         function ()
             awful.client.focus.byidx(-1)
             if client.focus then client.focus:raise() end
         end),
-    awful.key({ modkey,         ***REMOVED*** "w", function () mymainmenu:show() end),
+    awful.key({ modkey,           }, "w", function () mymainmenu:show() end),
 
     -- Layout manipulation
-    awful.key({ modkey, "Shift" ***REMOVED*** "j", function () awful.client.swap.byidx(  1)    end),
-    awful.key({ modkey, "Shift" ***REMOVED*** "k", function () awful.client.swap.byidx( -1)    end),
+    awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end),
+    awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end),
     awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end),
     awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end),
-    awful.key({ modkey,         ***REMOVED*** "u", awful.client.urgent.jumpto),
-    awful.key({ modkey,         ***REMOVED*** "Tab",
+    awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
+    awful.key({ modkey,           }, "Tab",
         function ()
             awful.client.focus.history.previous()
             if client.focus then
@@ -563,18 +563,18 @@ globalkeys = awful.util.table.join(
         end),
 
     -- Standard program
-    awful.key({ modkey,         ***REMOVED*** "Return", function () awful.util.spawn(terminal) end),
+    awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
-    awful.key({ modkey, "Shift" ***REMOVED*** "q", awesome.quit),
+    awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
-    awful.key({ modkey,         ***REMOVED*** "l",     function () awful.tag.incmwfact( 0.05)    end),
-    awful.key({ modkey,         ***REMOVED*** "h",     function () awful.tag.incmwfact(-0.05)    end),
-    awful.key({ modkey, "Shift" ***REMOVED*** "h",     function () awful.tag.incnmaster( 1)      end),
-    awful.key({ modkey, "Shift" ***REMOVED*** "l",     function () awful.tag.incnmaster(-1)      end),
+    awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
+    awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
+    awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1)      end),
+    awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1)      end),
     awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1)         end),
     awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1)         end),
-    awful.key({ modkey,         ***REMOVED*** "space", function () awful.layout.inc(layouts,  1) end),
-    awful.key({ modkey, "Shift" ***REMOVED*** "space", function () awful.layout.inc(layouts, -1) end),
+    awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
+    awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 
     awful.key({ modkey, "Control" }, "n", awful.client.restore),
 
@@ -653,19 +653,19 @@ globalkeys = awful.util.table.join(
 )
 
 clientkeys = awful.util.table.join(
-    awful.key({ modkey,         ***REMOVED*** "f",      function (c) c.fullscreen = not c.fullscreen  end),
-    awful.key({ modkey, "Shift" ***REMOVED*** "c",      function (c) c:kill()                         end),
+    awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
+    awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
-    awful.key({ modkey,         ***REMOVED*** "o",      awful.client.movetoscreen                        ),
-    awful.key({ modkey,         ***REMOVED*** "t",      function (c) c.ontop = not c.ontop            end),
-    awful.key({ modkey,         ***REMOVED*** "n",
+    awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
+    awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
+    awful.key({ modkey,           }, "n",
         function (c)
             -- The client currently has the input focus, so it cannot be
             -- minimized, since minimized clients can't have the focus.
             c.minimized = true
         end),
-    awful.key({ modkey,         ***REMOVED*** "m",
+    awful.key({ modkey,           }, "m",
         function (c)
             c.maximized_horizontal = not c.maximized_horizontal
             c.maximized_vertical   = not c.maximized_vertical
@@ -728,36 +728,36 @@ root.keys(globalkeys)
 --      -> Spotify
 awful.rules.rules = {
     -- All clients will match this rule.
-  ***REMOVED*** rule = { },
+    { rule = { },
       properties = { border_width = beautiful.border_width,
                      border_color = beautiful.border_normal,
                      focus = awful.client.focus.filter,
                      keys = clientkeys,
                      buttons = clientbuttons } },
-  ***REMOVED*** rule = { class = "MPlayer" },
+    { rule = { class = "MPlayer" },
       properties = { floating = true } },
-  ***REMOVED*** rule = { class = "pinentry" },
+    { rule = { class = "pinentry" },
       properties = { floating = true } },
-  ***REMOVED*** rule = { class = "gimp" },
+    { rule = { class = "gimp" },
       properties = { floating = true } },
     
     -- Set Firefox to always map on tags number 2 of screen 1.
-   ***REMOVED*** rule = { class = "Firefox" },
+     { rule = { class = "Firefox" },
        properties = { tag = tags[1][2], floating = false } },
     
-  ***REMOVED*** rule = { class = "Gvim" },
+    { rule = { class = "Gvim" },
       properties = { tag = tags[1][8], floating = false } },
 
-  ***REMOVED*** rule = { class = "KeePass2" },
+    { rule = { class = "KeePass2" },
       properties = { tag = tags[1][6], floating = false } },
 
-  ***REMOVED*** rule = { class = "Zathura" },
+    { rule = { class = "Zathura" },
       properties = { tag = tags[1][5], floating = false } },
 
-  ***REMOVED*** rule = { class = "libreoffice-impress" },
+    { rule = { class = "libreoffice-impress" },
       properties = { tag = tags[1][5], floating = false } },
 
-  ***REMOVED*** rule = { class = "Eclipse" },
+    { rule = { class = "Eclipse" },
       properties = { tag = tags[1][8], floating = false } },
 
 }
@@ -772,7 +772,7 @@ rule = {
     rule = { class = "Spotify" }, 
     properties = { 
         tag = tags[screen_to_add][7], floating = false 
-  ***REMOVED*** 
+    } 
 }
 table.insert(awful.rules.rules, rule)
 
@@ -781,7 +781,7 @@ rule = {
     rule = { class = "Clementine" }, 
     properties = { 
         tag = tags[screen_to_add][7], floating = false 
-  ***REMOVED*** 
+    } 
 }
 table.insert(awful.rules.rules, rule)
 

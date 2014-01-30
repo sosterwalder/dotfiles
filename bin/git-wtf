@@ -124,7 +124,7 @@ def purple s; $color ? "\033[35m#{s}\033[0m" : s end
 ## if empty, 'to' has been merged into 'from'.
 def commits_between from, to
   if $long
-    `git log --pretty=format:"- %s [#{yellow "%h"}] (#{purple "%ae"***REMOVED*** %ar)" #{from}..#{to}`
+    `git log --pretty=format:"- %s [#{yellow "%h"}] (#{purple "%ae"}; %ar)" #{from}..#{to}`
   else
     `git log --pretty=format:"- %s [#{yellow "%h"}]" #{from}..#{to}`
   end.split(/[\r\n]+/)
@@ -266,7 +266,7 @@ $config = { "integration-branches" => %w(heads/master heads/next heads/edge), "i
     h["integration-branches"] ||= h["versions"] # support old nomenclature
     h
   else
-  ***REMOVED***}
+    {}
   end
 end
 

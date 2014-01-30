@@ -31,7 +31,7 @@ if [ -r ~/.zshrc -a -r ~/.zshrc.global -a ! -r ~/.zshrc.local ] ; then
 fi
 
 ## Settings for umask
-#if (( EUID == 0 )***REMOVED*** then
+#if (( EUID == 0 )); then
 #    umask 002
 #else
 #    umask 022
@@ -210,7 +210,7 @@ fi
 #cdpath=(.. ~)
 
 ## variation of our manzsh() function; pick you poison:
-#manzsh()***REMOVED*** /usr/bin/man zshall |  most +/"$1" ; }
+#manzsh()  { /usr/bin/man zshall |  most +/"$1" ; }
 
 ## Switching shell safely and efficiently? http://www.zsh.org/mla/workers/2001/msg02410.html
 #bash() {
@@ -319,16 +319,16 @@ fi
 #web() { perl -le 'print pack "B*","'$1'"' }
 #hew() { perl -le 'print unpack "H*","'$1'"' }
 #weh() { perl -le 'print pack "H*","'$1'"' }
-#pversion()  ***REMOVED*** perl -M$1 -le "print $1->VERSION" } # i. e."pversion LWP -> 5.79"
-#getlinks () ***REMOVED*** perl -ne 'while ( m/"((www|ftp|http):\/\/.*?)"/gc ) { print $1, "\n"; }' $* }
-#gethrefs () ***REMOVED*** perl -ne 'while ( m/href="([^"]*)"/gc ) { print $1, "\n"; }' $* }
-#getanames ()***REMOVED*** perl -ne 'while ( m/a name="([^"]*)"/gc ) { print $1, "\n"; }' $* }
-#getforms () ***REMOVED*** perl -ne 'while ( m:(\</?(input|form|select|option).*?\>):gic ) { print $1, "\n"; }' $* }
+#pversion()    { perl -M$1 -le "print $1->VERSION" } # i. e."pversion LWP -> 5.79"
+#getlinks ()   { perl -ne 'while ( m/"((www|ftp|http):\/\/.*?)"/gc ) { print $1, "\n"; }' $* }
+#gethrefs ()   { perl -ne 'while ( m/href="([^"]*)"/gc ) { print $1, "\n"; }' $* }
+#getanames ()  { perl -ne 'while ( m/a name="([^"]*)"/gc ) { print $1, "\n"; }' $* }
+#getforms ()   { perl -ne 'while ( m:(\</?(input|form|select|option).*?\>):gic ) { print $1, "\n"; }' $* }
 #getstrings () { perl -ne 'while ( m/"(.*?)"/gc ) { print $1, "\n"; }' $*}
-#getanchors () { perl -ne 'while ( m/ï¿½([^ï¿½ï¿½\n]+)ï¿½/gc ) { print $1, "\n"; }' $* }
-#showINC ()  ***REMOVED*** perl -e 'for (@INC) { printf "%d %s\n", $i++, $_ }' }
-#vimpm ()    ***REMOVED*** vim `perldoc -l $1 | sed -e 's/pod$/pm/'` }
-#vimhelp ()  ***REMOVED*** vim -c "help $1" -c on -c "au! VimEnter *" }
+#getanchors () { perl -ne 'while ( m/«([^«»\n]+)»/gc ) { print $1, "\n"; }' $* }
+#showINC ()    { perl -e 'for (@INC) { printf "%d %s\n", $i++, $_ }' }
+#vimpm ()      { vim `perldoc -l $1 | sed -e 's/pod$/pm/'` }
+#vimhelp ()    { vim -c "help $1" -c on -c "au! VimEnter *" }
 
 export PATH=$PATH:$HOME/bin
 export PATH="/usr/lib/colorgcc/bin:$PATH"

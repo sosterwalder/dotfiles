@@ -1,9 +1,9 @@
 use strict;
-use Irssi (***REMOVED***
+use Irssi ();
 use Irssi::TextUI;
 use Encode;
 
-use vars qw($VERSION %IRSSI $BLOCK_ALL***REMOVED***
+use vars qw($VERSION %IRSSI $BLOCK_ALL);
 
 $VERSION = '0.7e';
 %IRSSI = (
@@ -13,7 +13,7 @@ $VERSION = '0.7e';
 	name             => 'awl',
 	description      => 'Adds a permanent advanced window list on the right or in a statusbar.',
 	license          => 'GNU GPLv2 or later',
-***REMOVED***
+);
 
 # Usage
 # =====
@@ -134,7 +134,7 @@ $VERSION = '0.7e';
 
 # Nei =^.^= ( anti@conference.jabber.teamidiot.de )
 
-use Storable (***REMOVED***
+use Storable ();
 use Fcntl;
 
 my $actString = [];   # statusbar texts
@@ -153,7 +153,7 @@ my $MOUSE_ON = undef;
 my $FIRST_RUN = 1;
 my $currentColumns = 0;
 my $screenResizing;
-my ($screenHeight, $screenWidth***REMOVED***
+my ($screenHeight, $screenWidth);
 my $terminfo = bless { # xterm here, make this modular
 	NAME => 'Term::Info::xterm',
 	PARENTS => [],
@@ -188,59 +188,59 @@ sub add_statusbar {
 		# add subs
 		for my $l ($_) { {
 			no strict 'refs';
-			*{set$l} = sub { awl($l, @_) ***REMOVED***
-		***REMOVED*** }
-		Irssi::command('statusbar ' . (set$_) . ' reset'***REMOVED***
-		Irssi::command('statusbar ' . (set$_) . ' enable'***REMOVED***
+			*{set$l} = sub { awl($l, @_) };
+		}; }
+		Irssi::command('statusbar ' . (set$_) . ' reset');
+		Irssi::command('statusbar ' . (set$_) . ' enable');
 		if (lc Irssi::settings_get_str(set 'placement') eq 'top') {
-			Irssi::command('statusbar ' . (set$_) . ' placement top'***REMOVED***
+			Irssi::command('statusbar ' . (set$_) . ' placement top');
 		}
 		if ((my $x = int Irssi::settings_get_int(set 'position')) != 0) {
-			Irssi::command('statusbar ' . (set$_) . ' position ' . $x***REMOVED***
+			Irssi::command('statusbar ' . (set$_) . ' position ' . $x);
 		}
-		Irssi::command('statusbar ' . (set$_) . ' add -priority 100 -alignment left barstart'***REMOVED***
-		Irssi::command('statusbar ' . (set$_) . ' add ' . (set$_)***REMOVED***
-		Irssi::command('statusbar ' . (set$_) . ' add -priority 100 -alignment right barend'***REMOVED***
-		Irssi::command('statusbar ' . (set$_) . ' disable'***REMOVED***
-		Irssi::statusbar_item_register(set$_, '$0', set$_***REMOVED***
-		$statusbars{$_} = {***REMOVED***
+		Irssi::command('statusbar ' . (set$_) . ' add -priority 100 -alignment left barstart');
+		Irssi::command('statusbar ' . (set$_) . ' add ' . (set$_));
+		Irssi::command('statusbar ' . (set$_) . ' add -priority 100 -alignment right barend');
+		Irssi::command('statusbar ' . (set$_) . ' disable');
+		Irssi::statusbar_item_register(set$_, '$0', set$_);
+		$statusbars{$_} = {};
 	}
 }
 
 sub remove_statusbar {
 	for (@_) {
-		Irssi::command('statusbar ' . (set$_) . ' reset'***REMOVED***
-		Irssi::statusbar_item_unregister(set$_***REMOVED***
+		Irssi::command('statusbar ' . (set$_) . ' reset');
+		Irssi::statusbar_item_unregister(set$_);
 		# DO NOT REMOVE the sub before you have unregistered it :))
 		for my $l ($_) { {
 			no strict 'refs';
-			undef &{set$l***REMOVED***
-		***REMOVED*** }
-		delete $statusbars{$_***REMOVED***
+			undef &{set$l};
+		}; }
+		delete $statusbars{$_};
 	}
 }
 
 sub syncLines {
 	my $temp = $currentLines;
 	$currentLines = @$actString;
-	my $currMaxLines = Irssi::settings_get_int(set 'maxlines'***REMOVED***
+	my $currMaxLines = Irssi::settings_get_int(set 'maxlines');
 	if ($currMaxLines > 0 and @$actString > $currMaxLines) {
 		$currentLines = $currMaxLines;
 	}
 	elsif ($currMaxLines < 0) {
-		$currentLines = abs($currMaxLines***REMOVED***
+		$currentLines = abs($currMaxLines);
 	}
-	return if ($temp == $currentLines***REMOVED***
+	return if ($temp == $currentLines);
 	if ($currentLines > $temp) {
 		for ($temp .. ($currentLines - 1)) {
-			add_statusbar($_***REMOVED***
-			Irssi::command('statusbar ' . (set$_) . ' enable'***REMOVED***
+			add_statusbar($_);
+			Irssi::command('statusbar ' . (set$_) . ' enable');
 		}
 	}
 	else {
-		for ($_ = ($temp - 1***REMOVED*** $_ >= $currentLines; $_--) {
-			Irssi::command('statusbar ' . (set$_) . ' disable'***REMOVED***
-			remove_statusbar($_***REMOVED***
+		for ($_ = ($temp - 1); $_ >= $currentLines; $_--) {
+			Irssi::command('statusbar ' . (set$_) . ' disable');
+			remove_statusbar($_);
 		}
 	}
 }
@@ -251,7 +251,7 @@ sub awl {
 
 	if ($needRemake) {
 		$needRemake = undef;
-		remake(***REMOVED***
+		remake();
 	}
 
 	my $text = $actString->[$line];  # DO NOT set the actual
@@ -259,7 +259,7 @@ sub awl {
                                      # or
 	$text = '' unless defined $text; # you'll screw up the statusbar
                                      # counter ($currentLines)
-	$item->default_handler($get_size_only, $text, '', 1***REMOVED***
+	$item->default_handler($get_size_only, $text, '', 1);
 }
 
 # remove old statusbars
@@ -269,21 +269,21 @@ sub get_old_status {
 	if ($textDest->{'level'} == 524288 and $textDest->{'target'} eq ''
 			and !defined($textDest->{'server'})
 	) {
-		my $name = quotemeta(set ''***REMOVED***
-		if ($cont_stripped =~ m/^$name(\d+)\s/) { $killBar{$1} = {***REMOVED*** }
-		Irssi::signal_stop(***REMOVED***
+		my $name = quotemeta(set '');
+		if ($cont_stripped =~ m/^$name(\d+)\s/) { $killBar{$1} = {}; }
+		Irssi::signal_stop();
 	}
 }
 sub killOldStatus {
-	%killBar = (***REMOVED***
-	Irssi::signal_add_first('print text' => 'get_old_status'***REMOVED***
-	Irssi::command('statusbar'***REMOVED***
-	Irssi::signal_remove('print text' => 'get_old_status'***REMOVED***
-	remove_statusbar(keys %killBar***REMOVED***
+	%killBar = ();
+	Irssi::signal_add_first('print text' => 'get_old_status');
+	Irssi::command('statusbar');
+	Irssi::signal_remove('print text' => 'get_old_status');
+	remove_statusbar(keys %killBar);
 }
 
 
-my (%keymap, %wnmap***REMOVED***
+my (%keymap, %wnmap);
 
 sub get_keymap {
 	my ($textDest, undef, $cont_stripped) = @_;
@@ -291,17 +291,17 @@ sub get_keymap {
 			and !defined($textDest->{'server'})
 	) {
 		if ($cont_stripped =~ m/((?:meta-)*)(meta-|\^)(\S)\s+(.*)$/) {
-			my ($level, $ctl, $key, $command) = ($1, $2, $3, $4***REMOVED***
-			my $numlevel = ($level =~ y/-//***REMOVED***
+			my ($level, $ctl, $key, $command) = ($1, $2, $3, $4);
+			my $numlevel = ($level =~ y/-//);
 			$ctl eq '^' or $ctl = '';
 			my $map = ('-' x ($numlevel%2)) . ('+' x ($numlevel/2)) .
 																				$ctl . "$key";
 			if ($command =~ m/^change_window (\d+)/) {
-				my ($window) = ($1***REMOVED***
+				my ($window) = ($1);
 				$keymap{$window} = $map;
 			}
 			elsif ($command =~ m/^command window goto (\S+)/i) {
-				my ($window) = ($1***REMOVED***
+				my ($window) = ($1);
 				if ($window !~ /\D/) {
 					$keymap{$window} = $map;
 				}
@@ -310,26 +310,26 @@ sub get_keymap {
 				}
 			}
 		}
-		Irssi::signal_stop(***REMOVED***
+		Irssi::signal_stop();
 	}
 }
 
 sub update_keymap {
-	%keymap = (***REMOVED***
-	Irssi::signal_remove('command bind' => 'watch_keymap'***REMOVED***
-	Irssi::signal_add_first('print text' => 'get_keymap'***REMOVED***
-	Irssi::command('bind'***REMOVED*** # stolen from grep
-	Irssi::signal_remove('print text' => 'get_keymap'***REMOVED***
-	Irssi::signal_add('command bind' => 'watch_keymap'***REMOVED***
-	Irssi::timeout_add_once(100, 'eventChanged', undef***REMOVED***
+	%keymap = ();
+	Irssi::signal_remove('command bind' => 'watch_keymap');
+	Irssi::signal_add_first('print text' => 'get_keymap');
+	Irssi::command('bind'); # stolen from grep
+	Irssi::signal_remove('print text' => 'get_keymap');
+	Irssi::signal_add('command bind' => 'watch_keymap');
+	Irssi::timeout_add_once(100, 'eventChanged', undef);
 }
 
 # watch keymap changes
 sub watch_keymap {
-	Irssi::timeout_add_once(1000, 'update_keymap', undef***REMOVED***
+	Irssi::timeout_add_once(1000, 'update_keymap', undef);
 }
 
-update_keymap(***REMOVED***
+update_keymap();
 
 sub expand {
 	my ($string, %format) = @_;
@@ -344,7 +344,7 @@ my %strip_table = (
 	(map { $_ => '' } (split //, '04261537' .  'kbgcrmyw' . 'KBGCRMYW' . 'U9_8:|FnN>#[')),
 	#      escape
 	(map { $_ => $_ } (split //, '{}%')),
-***REMOVED***
+);
 sub ir_strip_codes { # strip %codes
 	my $o = shift;
 	$o =~ s/(%(.))/exists $strip_table{$2} ? $strip_table{$2} : $1/gex;
@@ -353,19 +353,19 @@ sub ir_strip_codes { # strip %codes
 
 sub ir_parse_special {
 	my $o; my $i = shift;
-	my $win = shift || Irssi::active_win(***REMOVED***
-	my $server = Irssi::active_server(***REMOVED***
+	my $win = shift || Irssi::active_win();
+	my $server = Irssi::active_server();
 	if (ref $win and ref $win->{'active'}) {
-		$o = $win->{'active'}->parse_special($i***REMOVED***
+		$o = $win->{'active'}->parse_special($i);
 	}
 	elsif (ref $win and ref $win->{'active_server'}) {
-		$o = $win->{'active_server'}->parse_special($i***REMOVED***
+		$o = $win->{'active_server'}->parse_special($i);
 	}
 	elsif (ref $server) {
-		$o =  $server->parse_special($i***REMOVED***
+		$o =  $server->parse_special($i);
 	}
 	else {
-		$o = Irssi::parse_special($i***REMOVED***
+		$o = Irssi::parse_special($i);
 	}
 	$o
 }
@@ -401,7 +401,7 @@ sub sb_expand { # expand {format }s (and apply parse_special for $vars)
 sub sb_strip {
 	ir_strip_codes(
 		sb_expand(shift)
-	***REMOVED***
+	);
 }
 {
 	my $term_type = 'term_type';
@@ -410,20 +410,20 @@ sub sb_strip {
 	}
 	eval {
 		require Text::CharWidth;
-	***REMOVED***
+	};
 	unless ($@) {
 		*screen_length = sub {
 			Text::CharWidth::mbswidth(+shift)
-		***REMOVED***
+		};
 	}
 	else {
 		*screen_length = sub {
 			my $temp = shift;
 			if (lc Irssi::settings_get_str($term_type) eq 'utf-8') {
-				Encode::_utf8_on($temp***REMOVED***
+				Encode::_utf8_on($temp);
 			}
 			length($temp)
-		***REMOVED***
+		};
 	}
 	sub as_uni {
 		no warnings 'utf8';
@@ -434,7 +434,7 @@ sub sb_strip {
 	}
 }
 sub sb_length {
-	my $temp = sb_strip(shift***REMOVED***
+	my $temp = sb_strip(shift);
 	screen_length($temp)
 }
 
@@ -473,7 +473,7 @@ sub ir_ve { # escapes special vars but leave colours alone
 
 my %ansi_table;
 {
-	my ($i, $j, $k) = (0, 0, 0***REMOVED***
+	my ($i, $j, $k) = (0, 0, 0);
 	%ansi_table = (
 		# fe-common::core::formats.c:format_expand_styles
 		#      do                                              format_backs
@@ -513,18 +513,18 @@ sub remove_uniform {
 }
 
 sub lc1459 ($) { my $x = shift; $x =~ y/A-Z][\^/a-z}{|~/; $x }
-Irssi::settings_add_str(setc, 'banned_channels', ''***REMOVED***
-Irssi::settings_add_bool(setc, 'banned_channels_on', 0***REMOVED***
+Irssi::settings_add_str(setc, 'banned_channels', '');
+Irssi::settings_add_bool(setc, 'banned_channels_on', 0);
 my %banned_channels = map { lc1459($_) => undef }
-split ' ', Irssi::settings_get_str('banned_channels'***REMOVED***
-Irssi::settings_add_str(setc, 'fancy_abbrev', 'fancy'***REMOVED***
+split ' ', Irssi::settings_get_str('banned_channels');
+Irssi::settings_add_str(setc, 'fancy_abbrev', 'fancy');
 
 sub remake () {
 	return if $BLOCK_ALL; # cannot remake during visible window detection
-	my ($hilight, $number, $display***REMOVED***
+	my ($hilight, $number, $display);
 	my $separator = '{sb_act_sep ' . Irssi::settings_get_str(set 'separator') .
 		'}';
-	my $custSort = Irssi::settings_get_str(set 'sort'***REMOVED***
+	my $custSort = Irssi::settings_get_str(set 'sort');
 	my $custSortDir = 1;
 	if ($custSort =~ /^[-!](.*)/) {
 		$custSortDir = -1;
@@ -539,40 +539,40 @@ sub remake () {
 				($a->{'refnum'} <=> $b->{'refnum'})
 			)
 		} Irssi::windows;
-	my $block = Irssi::settings_get_int(set 'block'***REMOVED***
+	my $block = Irssi::settings_get_int(set 'block');
 	my $columns = $currentColumns;
 	my $oldActString = $actString if $SCREEN_MODE;
 	$actString = $SCREEN_MODE ? ['   A W L'] : [];
 	my $line = $SCREEN_MODE ? 1 : 0;
 	my $width = $FIFO_MODE ? 0 :
 		($SCREEN_MODE ? $screenWidth - abs($block)*$columns + 1 :
-		([Irssi::windows]->[0]{'width'} - sb_length('{sb x}'))***REMOVED***
+		([Irssi::windows]->[0]{'width'} - sb_length('{sb x}')));
 	my $height = $screenHeight - (Irssi::settings_get_int(set
-			'height_adjust')***REMOVED***
-	my ($numPad, $keyPad) = (0, 0***REMOVED***
+			'height_adjust'));
+	my ($numPad, $keyPad) = (0, 0);
 	my %abbrevList;
 	if ($SCREEN_MODE or Irssi::settings_get_bool(set 'sbar_maxlength')
 			or ($block < 0)
 	) {
-		%abbrevList = (***REMOVED***
+		%abbrevList = ();
 		if (Irssi::settings_get_str('fancy_abbrev') !~ /^(no|off|head)/i) {
 			my @nameList = map { as_uni($_) }
 				map { ref $_ ? remove_uniform($_->get_active_name) : '' } @wins;
 			for (my $i = 0; $i < @nameList - 1; ++$i) {
-				my ($x, $y) = ($nameList[$i], $nameList[$i + 1]***REMOVED***
+				my ($x, $y) = ($nameList[$i], $nameList[$i + 1]);
 				for ($x, $y) { s/^[+#!=]// }
-				my $res = Algorithm::LCSS::LCSS($x, $y***REMOVED***
+				my $res = Algorithm::LCSS::LCSS($x, $y);
 				if (defined $res) {
 					$abbrevList{$nameList[$i]} = int (index($nameList[$i], $res) +
-						(length($res) / 2)***REMOVED***
+						(length($res) / 2));
 					$abbrevList{$nameList[$i+1]} = int (index($nameList[$i+1], $res) +
-						(length($res) / 2)***REMOVED***
+						(length($res) / 2));
 				}
 			}
 		}
 		if ($SCREEN_MODE or ($block < 0)) {
-			$numPad = length((sort { length($b) <=> length($a) } keys %keymap)[0]***REMOVED***
-			$keyPad = length((sort { length($b) <=> length($a) } values %keymap)[0]***REMOVED***
+			$numPad = length((sort { length($b) <=> length($a) } keys %keymap)[0]);
+			$keyPad = length((sort { length($b) <=> length($a) } values %keymap)[0]);
 		}
 	}
 	if ($SCREEN_MODE) {
@@ -581,7 +581,7 @@ sub remake () {
 							 $terminfo->cup(0, $width).
 			             $actString->[0].
 							 $terminfo->el()
-	or wlreset(***REMOVED***
+	or wlreset();
 		}
 	}
 	my $last_net = '';
@@ -589,13 +589,13 @@ sub remake () {
 		my $global_hack_alert_tag_header;
 		unless ($SCREEN_MODE) {
 			$actString->[$line] = '' unless defined $actString->[$line]
-					or Irssi::settings_get_bool(set 'all_disable'***REMOVED***
+					or Irssi::settings_get_bool(set 'all_disable');
 		}
 
 		ref($win) or next;
 
-		my $backup_win = Storable::dclone($win***REMOVED***
-		ref($backup_win->{active}) or delete $backup_win->{active***REMOVED***
+		my $backup_win = Storable::dclone($win);
+		ref($backup_win->{active}) or delete $backup_win->{active};
 		if (Irssi::settings_get_str(set 'display_header') and 
 				$last_net ne $backup_win->{active}{server}{tag}) {
 			$global_hack_alert_tag_header = 1;
@@ -603,12 +603,12 @@ sub remake () {
 
 		my $name = $win->get_active_name;
 		$name = '*' if (Irssi::settings_get_bool('banned_channels_on') and exists
-			$banned_channels{lc1459($name)}***REMOVED***
+			$banned_channels{lc1459($name)});
 		$name = remove_uniform($name) if $name ne '*';
 		$name = $win->{'name'} if $name ne '*' and $win->{'name'} ne ''
-			and Irssi::settings_get_bool(set 'prefer_name'***REMOVED***
-		my $active = $win->{'active'***REMOVED***
-		my $colour = $win->{'hilight_color'***REMOVED***
+			and Irssi::settings_get_bool(set 'prefer_name');
+		my $active = $win->{'active'};
+		my $colour = $win->{'hilight_color'};
 		if (!defined $colour) { $colour = ''; }
 
 		if ($win->{'data_level'} < abs Irssi::settings_get_int(set 'hide_data')
@@ -622,10 +622,10 @@ sub remake () {
 		elsif ($win->{'data_level'} == 2) { $hilight = '{sb_act_msg '; } #'}'
 		elsif ($colour             ne '') { $hilight = "{sb_act_hilight_color $colour "; }
 		elsif ($win->{'data_level'} == 3) { $hilight = '{sb_act_hilight '; } #'}'
-		else                            ***REMOVED*** $hilight = '{sb_act_special '; } #'}'
+		else                              { $hilight = '{sb_act_special '; } #'}'
 
-		$number = $win->{'refnum'***REMOVED***
-		my @display = ('display_nokey'***REMOVED***
+		$number = $win->{'refnum'};
+		my @display = ('display_nokey');
 		if (defined $keymap{$number} and $keymap{$number} ne '') {
 			unshift @display, map { (my $cpy = $_) =~ s/_no/_/; $cpy } @display;
 		}
@@ -641,8 +641,8 @@ sub remake () {
 			@display)[0];
 
 		if ($global_hack_alert_tag_header) {
-			$display = Irssi::settings_get_str(set 'display_header'***REMOVED***
-			$name = $backup_win->{active}{server}{tag***REMOVED***
+			$display = Irssi::settings_get_str(set 'display_header');
+			$name = $backup_win->{active}{server}{tag};
 		}
 			
 		if ($SCREEN_MODE or Irssi::settings_get_bool(set 'sbar_maxlength')
@@ -656,12 +656,12 @@ sub remake () {
 				H => $hilight, #'{'
 				S => '}{sb_background}'
 			), 1), $win)))) - 1;
-			my $uname = as_uni($name***REMOVED***
-			my $diff = abs($block) - (screen_length($name) + $baseLength***REMOVED***
+			my $uname = as_uni($name);
+			my $diff = abs($block) - (screen_length($name) + $baseLength);
 			if ($diff < 0) { # too long
 				if (abs($diff) >= screen_length($name)) { $name = '' } # forget it
 				elsif (abs($diff) + 1 >= screen_length($name)) { $name = as_tc(substr($uname,
-						0, 1)***REMOVED*** }
+						0, 1)); }
 				else {
 					my $ulen = length $uname;
 					for (
@@ -675,7 +675,7 @@ sub remake () {
 						$middle2 > -1 && length $uname > 1;
 						--$middle2) {
 						(substr $uname, $middle2/2, 2) = '~';
-						my $sl = screen_length(as_tc($uname)***REMOVED***
+						my $sl = screen_length(as_tc($uname));
 						if ($sl + $baseLength < abs $block) {
 							(substr $uname, $middle2/2, 1) = "\x{301c}";
 							last;
@@ -684,11 +684,11 @@ sub remake () {
 							last;
 						}
 					}
-					$name = as_tc($uname***REMOVED***
+					$name = as_tc($uname);
 				}
 			}
 			elsif ($SCREEN_MODE or ($block < 0)) {
-				$name .= (' ' x $diff***REMOVED***
+				$name .= (' ' x $diff);
 			}
 		}
 
@@ -698,7 +698,7 @@ sub remake () {
 			Q => ir_fe((' 'x($keyPad - length($keymap{$number}))) . $keymap{$number}),
 			H => $hilight, #{
 			S => '}{sb_background}'
-		), 1), $win)***REMOVED***
+		), 1), $win));
 		if ($SCREEN_MODE) {
 			$actString->[$line] = $add;
 			if ((!defined $oldActString->[$line]
@@ -710,7 +710,7 @@ sub remake () {
 								 $terminfo->cup(($line-1) % $height+1, $width + (
 									 abs($block) * int(($line-1) / $height))).
 				formats_to_ansi_basic(sb_expand(ir_escape($actString->[$line])))
-	or wlreset(***REMOVED***
+	or wlreset();
 			}
 			$line++;
 		}
@@ -719,13 +719,13 @@ sub remake () {
 
 			if (sb_length(ir_escape($actString->[$line] . $add)) >= $width) {
 				$actString->[$line] .= ' ' x ($width - sb_length(ir_escape(
-					$actString->[$line]))***REMOVED***
+					$actString->[$line])));
 				$line++;
 			}
 			$actString->[$line] .= $add . $separator;
 		}
 		if ($global_hack_alert_tag_header) {
-			$last_net = $backup_win->{active}{server}{tag***REMOVED***
+			$last_net = $backup_win->{active}{server}{tag};
 			redo;
 		}
 	}
@@ -736,7 +736,7 @@ sub remake () {
 							 $terminfo->cup(($line-1) % $height+1, $width + (
 								 abs($block) * int(($line-1) / $height))).
 							 $terminfo->el()
-	or wlreset(***REMOVED***
+	or wlreset();
 			$line++;
 		}
 	}
@@ -746,7 +746,7 @@ sub remake () {
 			my $x = $actString->[$p];             # properly, etc.
 			$x =~ s/\Q$separator\E([ ]*)$/$1/;
 			$x = "{sb $x}";
-			$x = ir_escape($x***REMOVED***
+			$x = ir_escape($x);
 			$actString->[$p] = $x;
 		}
 	}
@@ -756,9 +756,9 @@ sub eventChanged () { # Implement a change queue/blocker
 	return if $BLOCK_ALL;
 	unless ($_[0] && $_[0] eq 'TIMED') {
 		if (defined $globTime) {
-			Irssi::timeout_remove($globTime***REMOVED***
+			Irssi::timeout_remove($globTime);
 		} # delay the update further
-		$globTime = Irssi::timeout_add_once(GLOB_QUEUE_TIMER, 'eventChanged', 'TIMED'***REMOVED***
+		$globTime = Irssi::timeout_add_once(GLOB_QUEUE_TIMER, 'eventChanged', 'TIMED');
 		return;
 	}
 	$globTime = undef;
@@ -767,9 +767,9 @@ sub eventChanged () { # Implement a change queue/blocker
 		Irssi::settings_get_int(set 'height_adjust')
 		: "!\n" . Irssi::settings_get_str(set 'placement').
 		Irssi::settings_get_int(set 'position')).
-		Irssi::settings_get_str(set 'automode'***REMOVED***
-	if ($temp ne $resetNeeded) { wlreset(***REMOVED*** return; }
-	if ($FIRST_RUN) { $FIRST_RUN = undef; update_awins(***REMOVED*** return; }
+		Irssi::settings_get_str(set 'automode');
+	if ($temp ne $resetNeeded) { wlreset(); return; }
+	if ($FIRST_RUN) { $FIRST_RUN = undef; update_awins(); return; }
 	$needRemake = 1;
 
 	if (
@@ -780,18 +780,18 @@ sub eventChanged () { # Implement a change queue/blocker
 		(!Irssi::settings_get_bool(set 'all_disable') and $currentLines < 1)
 	) {
 		$needRemake = undef;
-		remake(***REMOVED***
+		remake();
 	}
 
 	unless ($SCREEN_MODE) {
-		Irssi::timeout_add_once(100, 'syncLines', undef***REMOVED***
+		Irssi::timeout_add_once(100, 'syncLines', undef);
 
 		for (keys %statusbars) {
-			Irssi::statusbar_items_redraw(set$_***REMOVED***
+			Irssi::statusbar_items_redraw(set$_);
 		}
 	}
 	else {
-		Irssi::timeout_add_once(100, 'syncColumns', undef***REMOVED***
+		Irssi::timeout_add_once(100, 'syncColumns', undef);
 	}
 }
 
@@ -799,7 +799,7 @@ sub screenFullRedraw {
 	my ($window) = @_;
 	if (!ref $window or $window->{'refnum'} == Irssi::active_win->{'refnum'}) {
 		$actString = [];
-		eventChanged(***REMOVED***
+		eventChanged();
 	}
 }
 
@@ -811,8 +811,8 @@ sub screenSize { # from nicklist.pl
 	$screenHeight = $row-1;
 	
 	Irssi::timeout_add_once(100, sub {
-		Irssi::timeout_add_once(10,sub {$screenResizing = 0; screenFullRedraw()}, []***REMOVED***
-	}, $screenWidth***REMOVED***
+		Irssi::timeout_add_once(10,sub {$screenResizing = 0; screenFullRedraw()}, []);
+	}, $screenWidth);
 }
 
 sub fifoOff {
@@ -820,74 +820,74 @@ sub fifoOff {
 }
 
 sub syncColumns {
-	return if (@$actString == 0***REMOVED***
+	return if (@$actString == 0);
 	my $temp = $currentColumns;
 	my $height = $screenHeight - (Irssi::settings_get_int(set
-			'height_adjust')***REMOVED***
+			'height_adjust'));
 	$currentColumns = int(($#$actString-1) / $height) + 1;
-	my $currMaxColumns = Irssi::settings_get_int(set 'columns'***REMOVED***
+	my $currMaxColumns = Irssi::settings_get_int(set 'columns');
 	if ($currMaxColumns > 0 and $currentColumns > $currMaxColumns) {
 		$currentColumns = $currMaxColumns;
 	}
 	elsif ($currMaxColumns < 0) {
-		$currentColumns = abs($currMaxColumns***REMOVED***
+		$currentColumns = abs($currMaxColumns);
 	}
-	return if ($temp == $currentColumns***REMOVED***
-	screenSize(***REMOVED***
+	return if ($temp == $currentColumns);
+	screenSize();
 }
 
 sub resizeTerm () {
 	if ($SCREEN_MODE and !$screenResizing) {
 		$screenResizing = 1;
-		Irssi::timeout_add_once(10, 'screenSize', undef***REMOVED***
+		Irssi::timeout_add_once(10, 'screenSize', undef);
 	}
-	Irssi::timeout_add_once(100, 'eventChanged', undef***REMOVED***
+	Irssi::timeout_add_once(100, 'eventChanged', undef);
 }
 
 
-Irssi::settings_add_str(setc, set 'display_nokey', '[$N]$H$C$S'***REMOVED***
-Irssi::settings_add_str(setc, set 'display_key', '[$Q=$N]$H$C$S'***REMOVED***
-Irssi::settings_add_str(setc, set 'display_nokey_visible', ''***REMOVED***
-Irssi::settings_add_str(setc, set 'display_key_visible', ''***REMOVED***
-Irssi::settings_add_str(setc, set 'display_nokey_active', ''***REMOVED***
-Irssi::settings_add_str(setc, set 'display_key_active', ''***REMOVED***
-Irssi::settings_add_str(setc, set 'display_header', ''***REMOVED***
-Irssi::settings_add_str(setc, set 'separator', "\\ "***REMOVED***
-Irssi::settings_add_bool(setc, set 'prefer_name', 0***REMOVED***
-Irssi::settings_add_int(setc, set 'hide_empty', 0***REMOVED***
-Irssi::settings_add_int(setc, set 'hide_data', 0***REMOVED***
-Irssi::settings_add_int(setc, set 'maxlines', 9***REMOVED***
-Irssi::settings_add_int(setc, set 'columns', 1***REMOVED***
-Irssi::settings_add_int(setc, set 'block', 20***REMOVED***
-Irssi::settings_add_bool(setc, set 'sbar_maxlength', 0***REMOVED***
-Irssi::settings_add_int(setc, set 'height_adjust', 2***REMOVED***
-Irssi::settings_add_str(setc, set 'sort', 'refnum'***REMOVED***
-Irssi::settings_add_str(setc, set 'placement', 'bottom'***REMOVED***
-Irssi::settings_add_int(setc, set 'position', 0***REMOVED***
-Irssi::settings_add_bool(setc, set 'all_disable', 0***REMOVED***
-Irssi::settings_add_str(setc, set 'automode', 'sbar'***REMOVED***
-Irssi::settings_add_str(setc, set 'fifo', Irssi::get_irssi_dir . '/_windowlist'***REMOVED***
+Irssi::settings_add_str(setc, set 'display_nokey', '[$N]$H$C$S');
+Irssi::settings_add_str(setc, set 'display_key', '[$Q=$N]$H$C$S');
+Irssi::settings_add_str(setc, set 'display_nokey_visible', '');
+Irssi::settings_add_str(setc, set 'display_key_visible', '');
+Irssi::settings_add_str(setc, set 'display_nokey_active', '');
+Irssi::settings_add_str(setc, set 'display_key_active', '');
+Irssi::settings_add_str(setc, set 'display_header', '');
+Irssi::settings_add_str(setc, set 'separator', "\\ ");
+Irssi::settings_add_bool(setc, set 'prefer_name', 0);
+Irssi::settings_add_int(setc, set 'hide_empty', 0);
+Irssi::settings_add_int(setc, set 'hide_data', 0);
+Irssi::settings_add_int(setc, set 'maxlines', 9);
+Irssi::settings_add_int(setc, set 'columns', 1);
+Irssi::settings_add_int(setc, set 'block', 20);
+Irssi::settings_add_bool(setc, set 'sbar_maxlength', 0);
+Irssi::settings_add_int(setc, set 'height_adjust', 2);
+Irssi::settings_add_str(setc, set 'sort', 'refnum');
+Irssi::settings_add_str(setc, set 'placement', 'bottom');
+Irssi::settings_add_int(setc, set 'position', 0);
+Irssi::settings_add_bool(setc, set 'all_disable', 0);
+Irssi::settings_add_str(setc, set 'automode', 'sbar');
+Irssi::settings_add_str(setc, set 'fifo', Irssi::get_irssi_dir . '/_windowlist');
 
 
 sub wlreset {
 	$actString = [];
 	$currentLines = 0;
-	killOldStatus(***REMOVED***
+	killOldStatus();
 	if ($MOUSE_ON) {
-		Irssi::command_bind('mouse_xterm' => 'mouse_xterm'***REMOVED***
-		Irssi::command('/^bind meta-[M /mouse_xterm'***REMOVED***
-		Irssi::signal_add_first('gui key pressed' => 'mouse_key_hook'***REMOVED***
-		mouse_enable(***REMOVED***
+		Irssi::command_bind('mouse_xterm' => 'mouse_xterm');
+		Irssi::command('/^bind meta-[M /mouse_xterm');
+		Irssi::signal_add_first('gui key pressed' => 'mouse_key_hook');
+		mouse_enable();
 	}
 	my $was_fifo_mode = $FIFO_MODE;
 	if ($FIFO_MODE = (Irssi::settings_get_str(set 'automode') =~ /fifo/i)
 			and
 		!$was_fifo_mode
 	) {
-		my $path = Irssi::settings_get_str(set 'fifo'***REMOVED***
+		my $path = Irssi::settings_get_str(set 'fifo');
 		if (!sysopen(AWLOUT, $path, O_WRONLY | O_NONBLOCK)) {
 			Irssi::print("Couldn\'t write to the fifo ($!). Please make sure you ".
-				"created the fifo and start reading it (\"cat $path\").", MSGLEVEL_CLIENTERROR***REMOVED***
+				"created the fifo and start reading it (\"cat $path\").", MSGLEVEL_CLIENTERROR);
 			$SCREEN_MODE = $FIFO_MODE = undef;
 		}
 		else {
@@ -898,40 +898,40 @@ sub wlreset {
 	}
 	elsif ($was_fifo_mode and !$FIFO_MODE) {
 		$SCREEN_MODE = $FIFO_MODE;
-		fifoOff(***REMOVED***
+		fifoOff();
 	}
 	$resetNeeded = ($SCREEN_MODE ?
 		"\\\n" . Irssi::settings_get_int(set 'block').
 		Irssi::settings_get_int(set 'height_adjust')
 		: "!\n" . Irssi::settings_get_str(set 'placement').
 		Irssi::settings_get_int(set 'position')).
-		Irssi::settings_get_str(set 'automode'***REMOVED***
-	resizeTerm(***REMOVED***
+		Irssi::settings_get_str(set 'automode');
+	resizeTerm();
 }
 
-Irssi::timeout_add_once(10, 'wlreset', undef***REMOVED***
+Irssi::timeout_add_once(10, 'wlreset', undef);
 
 
 my $Unload;
 sub unload ($$$) {
 	$Unload = 1;
 	# pretend we didn't do anything ASAP
-	Irssi::timeout_add_once(10, sub { $Unload = undef; }, undef***REMOVED***
+	Irssi::timeout_add_once(10, sub { $Unload = undef; }, undef);
 }
 # last try to catch a sigsegv
-Irssi::signal_add_first('gui exit' => sub { $Unload = undef; }***REMOVED***
+Irssi::signal_add_first('gui exit' => sub { $Unload = undef; });
 sub UNLOAD {
 	if ($Unload) {
 		$actString = [''];
-		killOldStatus(***REMOVED***
+		killOldStatus();
 		if ($FIFO_MODE) {
-			fifoOff(***REMOVED***
+			fifoOff();
 		}
 		if ($MOUSE_ON) {
 			print STDERR "\e[?1000l"; # stop tracking
-			Irssi::signal_remove('gui key pressed' => 'mouse_key_hook'***REMOVED***
-			Irssi::command('/^bind -delete meta-[M'***REMOVED***
-			Irssi::command_unbind('mouse_xterm' => 'mouse_xterm'***REMOVED***
+			Irssi::signal_remove('gui key pressed' => 'mouse_key_hook');
+			Irssi::command('/^bind -delete meta-[M');
+			Irssi::command_unbind('mouse_xterm' => 'mouse_xterm');
 		}
 	}
 }
@@ -940,9 +940,9 @@ sub UNLOAD {
 sub addPrintTextHook { # update on print text
 	return if $BLOCK_ALL;
 	return if $_[0]->{'level'} == 262144 and $_[0]->{'target'} eq ''
-			and !defined($_[0]->{'server'}***REMOVED***
+			and !defined($_[0]->{'server'});
 	if (Irssi::settings_get_str(set 'sort') =~ /^[-!]?last_line$/) {
-		Irssi::timeout_add_once(100, 'eventChanged', undef***REMOVED***
+		Irssi::timeout_add_once(100, 'eventChanged', undef);
 	}
 }
 
@@ -954,46 +954,46 @@ sub update_awins {
 	return if $BLOCK_ALL;
 	unless ($_[0] && $_[0] eq 'TIMED') {
 		if (defined $globTime2) {
-			Irssi::timeout_remove($globTime2***REMOVED***
+			Irssi::timeout_remove($globTime2);
 		} # delay the update further
-		$globTime2 = Irssi::timeout_add_once(GLOB_QUEUE_TIMER, 'update_awins', 'TIMED'***REMOVED***
+		$globTime2 = Irssi::timeout_add_once(GLOB_QUEUE_TIMER, 'update_awins', 'TIMED');
 		return;
 	}
 	$globTime2 = undef;
 	{
-		Irssi::signal_add_first('window changed' => 'distort_event_window_change'***REMOVED***
+		Irssi::signal_add_first('window changed' => 'distort_event_window_change');
 		local $BLOCK_ALL = 1;
-		my $wins = @{[Irssi::windows]***REMOVED***
-		%awins = (***REMOVED***
+		my $wins = @{[Irssi::windows]};
+		%awins = ();
 		my $bwin = 
 			my $awin = Irssi::active_win;
-		$awin->command('window last'***REMOVED***
+		$awin->command('window last');
 		my $lwin = Irssi::active_win;
-		$lwin->command('window last'***REMOVED***
+		$lwin->command('window last');
 		my $awin_counter = 0;
 		do {
-			Irssi::active_win->command('window up'***REMOVED***
+			Irssi::active_win->command('window up');
 			$awin = Irssi::active_win;
 			$awins{$awin->{'refnum'}} = undef;
 			++$awin_counter;
-		} until ($awin->{'refnum'} == $bwin->{'refnum'} || $awin_counter >= $wins***REMOVED***
-		$awin->command('window '.$lwin->{'refnum'}***REMOVED***
-		Irssi::active_win->command('window last'***REMOVED***
-		Irssi::signal_remove('window changed' => 'distort_event_window_change'***REMOVED***
+		} until ($awin->{'refnum'} == $bwin->{'refnum'} || $awin_counter >= $wins);
+		$awin->command('window '.$lwin->{'refnum'});
+		Irssi::active_win->command('window last');
+		Irssi::signal_remove('window changed' => 'distort_event_window_change');
 	}
 	&eventChanged;
 }
 
 Irssi::signal_add_first({
 	'command script unload' => 'unload',
-}***REMOVED***
+});
 Irssi::signal_add_last({
 	'setup changed' => 'eventChanged',
 	'print text' => 'addPrintTextHook',
 	'terminal resized' => 'resizeTerm',
 	'setup reread' => 'wlreset',
 	'window hilight' => 'eventChanged',
-}***REMOVED***
+});
 Irssi::signal_add({
 	'window changed' => 'update_awins',
 	'window item changed' => 'eventChanged',
@@ -1002,7 +1002,7 @@ Irssi::signal_add({
 	'window destroyed' => 'update_awins',
 	'window name changed' => 'eventChanged',
 	'window refnum changed' => 'eventChanged',
-}***REMOVED***
+});
 
 # Mouse script by Wouter Coekaerts: http://wouter.coekaerts.be/site/irssi/mouse
 # based on irssi mouse patch by mirage: http://darksun.com.pt/mirage/irssi/
@@ -1016,7 +1016,7 @@ sub mouse_xterm_off {
 }
 sub mouse_xterm {
 	$mouse_xterm_status = 0;
-	Irssi::timeout_add_once(10, 'mouse_xterm_off', undef***REMOVED***
+	Irssi::timeout_add_once(10, 'mouse_xterm_off', undef);
 }
 sub mouse_enable {
 	print STDERR "\e[?1000h"; # start tracking
@@ -1030,12 +1030,12 @@ sub mouse_event {
 			my $win;
 			if (!$SCREEN_MODE and
 				Irssi::settings_get_int(set 'block') < 0) {
-				$win = int($_[1] / abs(Irssi::settings_get_int(set 'block'))***REMOVED***
+				$win = int($_[1] / abs(Irssi::settings_get_int(set 'block')));
 				$win += 1;
 				$win += $_[2] * int(([Irssi::windows]->[0]{'width'} - sb_length('{sb x}')) /
-					abs(Irssi::settings_get_int(set 'block'))***REMOVED***
+					abs(Irssi::settings_get_int(set 'block')));
 			}
-			Irssi::command('window ' . $win***REMOVED***
+			Irssi::command('window ' . $win);
 		}
 	}
 	elsif ($_[0] == 3 and ($_[3] == 64 or $_[3] == 65) and
@@ -1049,7 +1049,7 @@ sub mouse_event {
 	}
 	else {
 		print STDERR "\e[?1000l"; # stop tracking
-		Irssi::timeout_add_once(1000, 'mouse_enable', undef***REMOVED***
+		Irssi::timeout_add_once(1000, 'mouse_enable', undef);
 	}
 }
 
@@ -1066,9 +1066,9 @@ sub mouse_key_hook {
 			# match screen coordinates
 			$mouse_xterm_combo[1]--;
 			$mouse_xterm_combo[2]--;
-			mouse_event(@mouse_xterm_combo[0 .. 2], @mouse_xterm_previous[0 .. 2]***REMOVED***
+			mouse_event(@mouse_xterm_combo[0 .. 2], @mouse_xterm_previous[0 .. 2]);
 		}
-		Irssi::signal_stop(***REMOVED***
+		Irssi::signal_stop();
 	}
 }
 
@@ -1076,16 +1076,16 @@ sub runsub {
 	my ($cmd) = @_;
 	sub {
 		my ($data, $server, $item) = @_;
-		Irssi::command_runsub($cmd, $data, $server, $item***REMOVED***
-	***REMOVED***
+		Irssi::command_runsub($cmd, $data, $server, $item);
+	};
 }
-Irssi::command_bind( setc() => runsub(setc()) ***REMOVED***
+Irssi::command_bind( setc() => runsub(setc()) );
 Irssi::command_bind(
 	setc() . ' redraw' => sub {
 		return unless $SCREEN_MODE;
-		screenFullRedraw(***REMOVED***
+		screenFullRedraw();
 	}
-***REMOVED***
+);
 		
 
 # Algorithm::LCSS module (from CPAN)
@@ -1111,15 +1111,15 @@ Irssi::command_bind(
 		 for ( $index = $start ; $index <= $end ; $index++ )
 		 {
 			  my $element = $aCollection->[$index];
-			  my $key = &$keyGen( $element, @_ ***REMOVED***
+			  my $key = &$keyGen( $element, @_ );
 			  if ( exists( $d{$key} ) )
-			***REMOVED***
-					unshift ( @{ $d{$key} }, $index ***REMOVED***
-			***REMOVED***
+			  {
+					unshift ( @{ $d{$key} }, $index );
+			  }
 			  else
-			***REMOVED***
+			  {
 					$d{$key} = [$index];
-			***REMOVED***
+			  }
 		 }
 		 return wantarray ? %d : \%d;
 	}
@@ -1132,7 +1132,7 @@ Irssi::command_bind(
 		 # off the end?
 		 if ( $high == -1 || $aValue > $array->[-1] )
 		 {
-			  push ( @$array, $aValue ***REMOVED***
+			  push ( @$array, $aValue );
 			  return $high + 1;
 		 }
 
@@ -1144,21 +1144,21 @@ Irssi::command_bind(
 		 {
 			  $index = ( $high + $low ) / 2;
 
-			  # $index = int(( $high + $low ) / 2***REMOVED***  # without 'use integer'
+			  # $index = int(( $high + $low ) / 2);  # without 'use integer'
 			  $found = $array->[$index];
 
 			  if ( $aValue == $found )
-			***REMOVED***
+			  {
 					return undef;
-			***REMOVED***
+			  }
 			  elsif ( $aValue > $found )
-			***REMOVED***
+			  {
 					$low = $index + 1;
-			***REMOVED***
+			  }
 			  else
-			***REMOVED***
+			  {
 					$high = $index - 1;
-			***REMOVED***
+			  }
 		 }
 
 		 # now insertion point is in $low.
@@ -1184,7 +1184,7 @@ Irssi::command_bind(
 		 # Check for bogus (non-ref) argument values
 		 if ( !ref($a) || !ref($b) )
 		 {
-			  my @callerInfo = caller(1***REMOVED***
+			  my @callerInfo = caller(1);
 			  die 'error: must pass array or hash references to ' . $callerInfo[3];
 		 }
 
@@ -1192,20 +1192,20 @@ Irssi::command_bind(
 		 # Note that these are optimized.
 		 if ( !defined($keyGen) )    # optimize for strings
 		 {
-			  $keyGen = sub { $_[0] ***REMOVED***
-			  $compare = sub { my ( $a, $b ) = @_; $a eq $b ***REMOVED***
+			  $keyGen = sub { $_[0] };
+			  $compare = sub { my ( $a, $b ) = @_; $a eq $b };
 		 }
 		 else
 		 {
 			  $compare = sub {
 					my $a = shift;
 					my $b = shift;
-					&$keyGen( $a, @_ ) eq &$keyGen( $b, @_ ***REMOVED***
-			***REMOVED***;
+					&$keyGen( $a, @_ ) eq &$keyGen( $b, @_ );
+			  };
 		 }
 
-		 my ( $aStart, $aFinish, $matchVector ) = ( 0, $#$a, [] ***REMOVED***
-		 my ( $prunedCount, $bMatches ) = ( 0, {} ***REMOVED***
+		 my ( $aStart, $aFinish, $matchVector ) = ( 0, $#$a, [] );
+		 my ( $prunedCount, $bMatches ) = ( 0, {} );
 
 		 if ( ref($b) eq 'HASH' )    # was $bMatches prepared for us?
 		 {
@@ -1213,39 +1213,39 @@ Irssi::command_bind(
 		 }
 		 else
 		 {
-			  my ( $bStart, $bFinish ) = ( 0, $#$b ***REMOVED***
+			  my ( $bStart, $bFinish ) = ( 0, $#$b );
 
 			  # First we prune off any common elements at the beginning
 			  while ( $aStart <= $aFinish
 					and $bStart <= $bFinish
 					and &$compare( $a->[$aStart], $b->[$bStart], @_ ) )
-			***REMOVED***
+			  {
 					$matchVector->[ $aStart++ ] = $bStart++;
 					$prunedCount++;
-			***REMOVED***
+			  }
 
 			  # now the end
 			  while ( $aStart <= $aFinish
 					and $bStart <= $bFinish
 					and &$compare( $a->[$aFinish], $b->[$bFinish], @_ ) )
-			***REMOVED***
+			  {
 					$matchVector->[ $aFinish-- ] = $bFinish--;
 					$prunedCount++;
-			***REMOVED***
+			  }
 
 			  # Now compute the equivalence classes of positions of elements
 			  $bMatches =
-				 _withPositionsOfInInterval( $b, $bStart, $bFinish, $keyGen, @_ ***REMOVED***
+				 _withPositionsOfInInterval( $b, $bStart, $bFinish, $keyGen, @_ );
 		 }
 		 my $thresh = [];
 		 my $links  = [];
 
-		 my ( $i, $ai, $j, $k ***REMOVED***
+		 my ( $i, $ai, $j, $k );
 		 for ( $i = $aStart ; $i <= $aFinish ; $i++ )
 		 {
-			  $ai = &$keyGen( $a->[$i], @_ ***REMOVED***
+			  $ai = &$keyGen( $a->[$i], @_ );
 			  if ( exists( $bMatches->{$ai} ) )
-			***REMOVED***
+			  {
 					$k = 0;
 					for $j ( @{ $bMatches->{$ai} } )
 					{
@@ -1257,7 +1257,7 @@ Irssi::command_bind(
 						 }
 						 else
 						 {
-							  $k = _replaceNextLargerWith( $thresh, $j, $k ***REMOVED***
+							  $k = _replaceNextLargerWith( $thresh, $j, $k );
 						 }
 
 						 # oddly, it's faster to always test this (CPU cache?).
@@ -1267,16 +1267,16 @@ Irssi::command_bind(
 								 [ ( $k ? $links->[ $k - 1 ] : undef ), $i, $j ];
 						 }
 					}
-			***REMOVED***
+			  }
 		 }
 
 		 if (@$thresh)
 		 {
 			  return $prunedCount + @$thresh if $counting;
 			  for ( my $link = $links->[$#$thresh] ; $link ; $link = $link->[0] )
-			***REMOVED***
+			  {
 					$matchVector->[ $link->[1] ] = $link->[2];
-			***REMOVED***
+			  }
 		 }
 		 elsif ($counting)
 		 {
@@ -1290,14 +1290,14 @@ Irssi::command_bind(
 	{
 		 my $a                 = shift;          # array ref
 		 my $b                 = shift;          # array ref
-		 my $callbacks         = shift || {***REMOVED***
+		 my $callbacks         = shift || {};
 		 my $keyGen            = shift;
-		 my $matchCallback     = $callbacks->{'MATCH'} || sub { ***REMOVED***
-		 my $discardACallback  = $callbacks->{'DISCARD_A'} || sub { ***REMOVED***
-		 my $finishedACallback = $callbacks->{'A_FINISHED'***REMOVED***
-		 my $discardBCallback  = $callbacks->{'DISCARD_B'} || sub { ***REMOVED***
-		 my $finishedBCallback = $callbacks->{'B_FINISHED'***REMOVED***
-		 my $matchVector = _longestCommonSubsequence( $a, $b, 0, $keyGen, @_ ***REMOVED***
+		 my $matchCallback     = $callbacks->{'MATCH'} || sub { };
+		 my $discardACallback  = $callbacks->{'DISCARD_A'} || sub { };
+		 my $finishedACallback = $callbacks->{'A_FINISHED'};
+		 my $discardBCallback  = $callbacks->{'DISCARD_B'} || sub { };
+		 my $finishedBCallback = $callbacks->{'B_FINISHED'};
+		 my $matchVector = _longestCommonSubsequence( $a, $b, 0, $keyGen, @_ );
 
 		 # Process all the lines in @$matchVector
 		 my $lastA = $#$a;
@@ -1309,14 +1309,14 @@ Irssi::command_bind(
 		 {
 			  my $bLine = $matchVector->[$ai];
 			  if ( defined($bLine) )    # matched
-			***REMOVED***
+			  {
 					&$discardBCallback( $ai, $bi++, @_ ) while $bi < $bLine;
-					&$matchCallback( $ai,    $bi++, @_ ***REMOVED***
-			***REMOVED***
+					&$matchCallback( $ai,    $bi++, @_ );
+			  }
 			  else
-			***REMOVED***
-					&$discardACallback( $ai, $bi, @_ ***REMOVED***
-			***REMOVED***
+			  {
+					&$discardACallback( $ai, $bi, @_ );
+			  }
 		 }
 
 		 # The last entry (if any) processed was a match.
@@ -1327,31 +1327,31 @@ Irssi::command_bind(
 
 			  # last A?
 			  if ( $ai == $lastA + 1 and $bi <= $lastB )
-			***REMOVED***
+			  {
 					if ( defined($finishedACallback) )
 					{
-						 &$finishedACallback( $lastA, @_ ***REMOVED***
+						 &$finishedACallback( $lastA, @_ );
 						 $finishedACallback = undef;
 					}
 					else
 					{
 						 &$discardBCallback( $ai, $bi++, @_ ) while $bi <= $lastB;
 					}
-			***REMOVED***
+			  }
 
 			  # last B?
 			  if ( $bi == $lastB + 1 and $ai <= $lastA )
-			***REMOVED***
+			  {
 					if ( defined($finishedBCallback) )
 					{
-						 &$finishedBCallback( $lastB, @_ ***REMOVED***
+						 &$finishedBCallback( $lastB, @_ );
 						 $finishedBCallback = undef;
 					}
 					else
 					{
 						 &$discardACallback( $ai++, $bi, @_ ) while $ai <= $lastA;
 					}
-			***REMOVED***
+			  }
 
 			  &$discardACallback( $ai++, $bi, @_ ) if $ai <= $lastA;
 			  &$discardBCallback( $ai, $bi++, @_ ) if $bi <= $lastB;
@@ -1364,13 +1364,13 @@ Irssi::command_bind(
 	{
 		 my $a                 = shift;              # array ref
 		 my $b                 = shift;              # array ref
-		 my $callbacks         = shift || {***REMOVED***
+		 my $callbacks         = shift || {};
 		 my $keyGen            = shift;
-		 my $matchCallback     = $callbacks->{'MATCH'} || sub { ***REMOVED***
-		 my $discardACallback  = $callbacks->{'DISCARD_A'} || sub { ***REMOVED***
-		 my $discardBCallback  = $callbacks->{'DISCARD_B'} || sub { ***REMOVED***
-		 my $changeCallback    = $callbacks->{'CHANGE'***REMOVED***
-		 my $matchVector = _longestCommonSubsequence( $a, $b, 0, $keyGen, @_ ***REMOVED***
+		 my $matchCallback     = $callbacks->{'MATCH'} || sub { };
+		 my $discardACallback  = $callbacks->{'DISCARD_A'} || sub { };
+		 my $discardBCallback  = $callbacks->{'DISCARD_B'} || sub { };
+		 my $changeCallback    = $callbacks->{'CHANGE'};
+		 my $matchVector = _longestCommonSubsequence( $a, $b, 0, $keyGen, @_ );
 
 		 # Process all the lines in match vector
 		 my $lastA = $#$a;
@@ -1386,10 +1386,10 @@ Irssi::command_bind(
 			  # Find next match indices $ma and $mb
 			  do {
 					$ma++;
-			***REMOVED*** while(
+			  } while(
 						 $ma <= $#$matchVector
 					&&  !defined $matchVector->[$ma]
-			  ***REMOVED***
+			  );
 
 			  last if $ma > $#$matchVector;    # end of matchVector?
 			  $mb = $matchVector->[$ma];
@@ -1397,7 +1397,7 @@ Irssi::command_bind(
 			  # Proceed with discard a/b or change events until
 			  # next match
 			  while ( $ai < $ma || $bi < $mb )
-			***REMOVED***
+			  {
 
 					if ( $ai < $ma && $bi < $mb )
 					{
@@ -1405,56 +1405,56 @@ Irssi::command_bind(
 						 # Change
 						 if ( defined $changeCallback )
 						 {
-							  &$changeCallback( $ai++, $bi++, @_ ***REMOVED***
+							  &$changeCallback( $ai++, $bi++, @_ );
 						 }
 						 else
 						 {
-							  &$discardACallback( $ai++, $bi, @_ ***REMOVED***
-							  &$discardBCallback( $ai, $bi++, @_ ***REMOVED***
+							  &$discardACallback( $ai++, $bi, @_ );
+							  &$discardBCallback( $ai, $bi++, @_ );
 						 }
 					}
 					elsif ( $ai < $ma )
 					{
-						 &$discardACallback( $ai++, $bi, @_ ***REMOVED***
+						 &$discardACallback( $ai++, $bi, @_ );
 					}
 					else
 					{
 
 						 # $bi < $mb
-						 &$discardBCallback( $ai, $bi++, @_ ***REMOVED***
+						 &$discardBCallback( $ai, $bi++, @_ );
 					}
-			***REMOVED***
+			  }
 
 			  # Match
-			  &$matchCallback( $ai++, $bi++, @_ ***REMOVED***
+			  &$matchCallback( $ai++, $bi++, @_ );
 		 }
 
 		 while ( $ai <= $lastA || $bi <= $lastB )
 		 {
 			  if ( $ai <= $lastA && $bi <= $lastB )
-			***REMOVED***
+			  {
 
 					# Change
 					if ( defined $changeCallback )
 					{
-						 &$changeCallback( $ai++, $bi++, @_ ***REMOVED***
+						 &$changeCallback( $ai++, $bi++, @_ );
 					}
 					else
 					{
-						 &$discardACallback( $ai++, $bi, @_ ***REMOVED***
-						 &$discardBCallback( $ai, $bi++, @_ ***REMOVED***
+						 &$discardACallback( $ai++, $bi, @_ );
+						 &$discardBCallback( $ai, $bi++, @_ );
 					}
-			***REMOVED***
+			  }
 			  elsif ( $ai <= $lastA )
-			***REMOVED***
-					&$discardACallback( $ai++, $bi, @_ ***REMOVED***
-			***REMOVED***
+			  {
+					&$discardACallback( $ai++, $bi, @_ );
+			  }
 			  else
-			***REMOVED***
+			  {
 
 					# $bi <= $lastB
-					&$discardBCallback( $ai, $bi++, @_ ***REMOVED***
-			***REMOVED***
+					&$discardBCallback( $ai, $bi++, @_ );
+			  }
 		 }
 
 		 return 1;
@@ -1466,24 +1466,24 @@ Irssi::command_bind(
 		 my $keyGen  = shift;    # code ref
 
 		 # set up code ref
-		 $keyGen = sub { $_[0] } unless defined($keyGen***REMOVED***
+		 $keyGen = sub { $_[0] } unless defined($keyGen);
 
-		 return scalar _withPositionsOfInInterval( $a, 0, $#$a, $keyGen, @_ ***REMOVED***
+		 return scalar _withPositionsOfInInterval( $a, 0, $#$a, $keyGen, @_ );
 	}
 
 	sub LCS
 	{
 		 my $a = shift;                  # array ref
 		 my $b = shift;                  # array ref or hash ref
-		 my $matchVector = _longestCommonSubsequence( $a, $b, 0, @_ ***REMOVED***
+		 my $matchVector = _longestCommonSubsequence( $a, $b, 0, @_ );
 		 my @retval;
 		 my $i;
 		 for ( $i = 0 ; $i <= $#$matchVector ; $i++ )
 		 {
 			  if ( defined( $matchVector->[$i] ) )
-			***REMOVED***
-					push ( @retval, $a->[$i] ***REMOVED***
-			***REMOVED***
+			  {
+					push ( @retval, $a->[$i] );
+			  }
 		 }
 		 return wantarray ? @retval : \@retval;
 	}
@@ -1492,14 +1492,14 @@ Irssi::command_bind(
 	{
 		 my $a = shift;                          # array ref
 		 my $b = shift;                          # array ref or hash ref
-		 return _longestCommonSubsequence( $a, $b, 1, @_ ***REMOVED***
+		 return _longestCommonSubsequence( $a, $b, 1, @_ );
 	}
 
 	sub LCSidx
 	{
 		 my $a= shift @_;
 		 my $b= shift @_;
-		 my $match= _longestCommonSubsequence( $a, $b, 0, @_ ***REMOVED***
+		 my $match= _longestCommonSubsequence( $a, $b, 0, @_ );
 		 my @am= grep defined $match->[$_], 0..$#$match;
 		 my @bm= @{$match}[@am];
 		 return \@am, \@bm;
@@ -1509,16 +1509,16 @@ Irssi::command_bind(
 	{
 		 my $a= shift @_;
 		 my $b= shift @_;
-		 my( $am, $bm )= LCSidx( $a, $b, @_ ***REMOVED***
+		 my( $am, $bm )= LCSidx( $a, $b, @_ );
 		 my @cdiff;
-		 my( $ai, $bi )= ( 0, 0 ***REMOVED***
+		 my( $ai, $bi )= ( 0, 0 );
 		 push @cdiff, $ai, $bi;
 		 while( 1 ) {
 			  while(  @$am  &&  $ai == $am->[0]  &&  $bi == $bm->[0]  ) {
 					shift @$am;
 					shift @$bm;
 					++$ai, ++$bi;
-			***REMOVED***
+			  }
 			  push @cdiff, $ai, $bi;
 			  last   if  ! @$am;
 			  $ai = $am->[0];
@@ -1538,18 +1538,18 @@ Irssi::command_bind(
 		 my $hunk   = [];
 		 my $discard = sub {
 			  push @$hunk, [ '-', $_[0], $a->[ $_[0] ] ];
-		 ***REMOVED***
+		 };
 		 my $add = sub {
 			  push @$hunk, [ '+', $_[1], $b->[ $_[1] ] ];
-		 ***REMOVED***
+		 };
 		 my $match = sub {
 			  push @$retval, $hunk
 					if 0 < @$hunk;
 			  $hunk = []
-		 ***REMOVED***
+		 };
 		 traverse_sequences( $a, $b,
-			***REMOVED*** MATCH => $match, DISCARD_A => $discard, DISCARD_B => $add }, @_ ***REMOVED***
-		 &$match(***REMOVED***
+			  { MATCH => $match, DISCARD_A => $discard, DISCARD_B => $add }, @_ );
+		 &$match();
 		 return wantarray ? @$retval : $retval;
 	}
 
@@ -1558,25 +1558,25 @@ Irssi::command_bind(
 		 my $a      = shift;    # array ref
 		 my $b      = shift;    # array ref
 		 my $retval = [];
-		 my $discard = sub { push ( @$retval, [ '-', $a->[ $_[0] ], "" ] ) ***REMOVED***
-		 my $add = sub { push ( @$retval, [ '+', "", $b->[ $_[1] ] ] ) ***REMOVED***
+		 my $discard = sub { push ( @$retval, [ '-', $a->[ $_[0] ], "" ] ) };
+		 my $add = sub { push ( @$retval, [ '+', "", $b->[ $_[1] ] ] ) };
 		 my $change = sub {
-			  push ( @$retval, [ 'c', $a->[ $_[0] ], $b->[ $_[1] ] ] ***REMOVED***
-		 ***REMOVED***
+			  push ( @$retval, [ 'c', $a->[ $_[0] ], $b->[ $_[1] ] ] );
+		 };
 		 my $match = sub {
-			  push ( @$retval, [ 'u', $a->[ $_[0] ], $b->[ $_[1] ] ] ***REMOVED***
-		 ***REMOVED***
+			  push ( @$retval, [ 'u', $a->[ $_[0] ], $b->[ $_[1] ] ] );
+		 };
 		 traverse_balanced(
 			  $a,
 			  $b,
-			***REMOVED***
+			  {
 					MATCH     => $match,
 					DISCARD_A => $discard,
 					DISCARD_B => $add,
 					CHANGE    => $change,
-			***REMOVED***
+			  },
 			  @_
-		 ***REMOVED***
+		 );
 		 return wantarray ? @$retval : $retval;
 	}
 
@@ -1584,20 +1584,20 @@ Irssi::command_bind(
 	package Algorithm::Diff::_impl;
 	use strict;
 
-	sub _Idx()***REMOVED*** 0 } # $me->[_Idx]: Ref to array of hunk indices
+	sub _Idx()  { 0 } # $me->[_Idx]: Ref to array of hunk indices
 					# 1   # $me->[1]: Ref to first sequence
 					# 2   # $me->[2]: Ref to second sequence
-	sub _End()***REMOVED*** 3 } # $me->[_End]: Diff between forward and reverse pos
+	sub _End()  { 3 } # $me->[_End]: Diff between forward and reverse pos
 	sub _Same() { 4 } # $me->[_Same]: 1 if pos 1 contains unchanged items
 	sub _Base() { 5 } # $me->[_Base]: Added to range's min and max
-	sub _Pos()***REMOVED*** 6 } # $me->[_Pos]: Which hunk is currently selected
-	sub _Off()***REMOVED*** 7 } # $me->[_Off]: Offset into _Idx for current position
+	sub _Pos()  { 6 } # $me->[_Pos]: Which hunk is currently selected
+	sub _Off()  { 7 } # $me->[_Off]: Offset into _Idx for current position
 	sub _Min() { -2 } # Added to _Off to get min instead of max+1
 
 	sub Die
 	{
 		 require Carp;
-		 Carp::confess( @_ ***REMOVED***
+		 Carp::confess( @_ );
 	}
 
 	sub _ChkPos
@@ -1605,7 +1605,7 @@ Irssi::command_bind(
 		 my( $me )= @_;
 		 return   if  $me->[_Pos];
 		 my $meth= ( caller(1) )[3];
-		 Die( "Called $meth on 'reset' object" ***REMOVED***
+		 Die( "Called $meth on 'reset' object" );
 	}
 
 	sub _ChkSeq
@@ -1614,7 +1614,7 @@ Irssi::command_bind(
 		 return $seq + $me->[_Off]
 			  if  1 == $seq  ||  2 == $seq;
 		 my $meth= ( caller(1) )[3];
-		 Die( "$meth: Invalid sequence number ($seq***REMOVED*** must be 1 or 2" ***REMOVED***
+		 Die( "$meth: Invalid sequence number ($seq); must be 1 or 2" );
 	}
 
 	sub getObjPkg
@@ -1634,25 +1634,25 @@ Irssi::command_bind(
 		 for( $opts->{keyGenArgs} ) {
 			  push @args, @$_   if  $_;
 		 }
-		 my $cdif= Algorithm::Diff::compact_diff( $seq1, $seq2, @args ***REMOVED***
+		 my $cdif= Algorithm::Diff::compact_diff( $seq1, $seq2, @args );
 		 my $same= 1;
 		 if(  0 == $cdif->[2]  &&  0 == $cdif->[3]  ) {
 			  $same= 0;
 			  splice @$cdif, 0, 2;
 		 }
-		 my @obj= ( $cdif, $seq1, $seq2 ***REMOVED***
+		 my @obj= ( $cdif, $seq1, $seq2 );
 		 $obj[_End] = (1+@$cdif)/2;
 		 $obj[_Same] = $same;
 		 $obj[_Base] = 0;
-		 my $me = bless \@obj, $us->getObjPkg(***REMOVED***
-		 $me->Reset( 0 ***REMOVED***
+		 my $me = bless \@obj, $us->getObjPkg();
+		 $me->Reset( 0 );
 		 return $me;
 	}
 
 	sub Reset
 	{
 		 my( $me, $pos )= @_;
-		 $pos= int( $pos || 0 ***REMOVED***
+		 $pos= int( $pos || 0 );
 		 $pos += $me->[_End]
 			  if  $pos < 0;
 		 $pos= 0
@@ -1674,9 +1674,9 @@ Irssi::command_bind(
 	{
 		 my( $me, $pos, $base )= @_;
 		 my @obj= @$me;
-		 my $you= bless \@obj, ref($me***REMOVED***
+		 my $you= bless \@obj, ref($me);
 		 $you->Reset( $pos )   if  defined $pos;
-		 $you->Base( $base ***REMOVED***
+		 $you->Base( $base );
 		 return $you;
 	}
 
@@ -1695,15 +1695,15 @@ Irssi::command_bind(
 	sub Prev {
 		 my( $me, $steps )= @_;
 		 $steps= 1   if  ! defined $steps;
-		 my $pos= $me->Next(-$steps***REMOVED***
+		 my $pos= $me->Next(-$steps);
 		 $pos -= $me->[_End]   if  $pos;
 		 return $pos;
 	}
 
 	sub Diff {
 		 my( $me )= @_;
-		 $me->_ChkPos(***REMOVED***
-		 return 0   if  $me->[_Same] == ( 1 & $me->[_Pos] ***REMOVED***
+		 $me->_ChkPos();
+		 return 0   if  $me->[_Same] == ( 1 & $me->[_Pos] );
 		 my $ret= 0;
 		 my $off= $me->[_Off];
 		 for my $seq ( 1, 2 ) {
@@ -1716,37 +1716,37 @@ Irssi::command_bind(
 
 	sub Min {
 		 my( $me, $seq, $base )= @_;
-		 $me->_ChkPos(***REMOVED***
-		 my $off= $me->_ChkSeq($seq***REMOVED***
+		 $me->_ChkPos();
+		 my $off= $me->_ChkSeq($seq);
 		 $base= $me->[_Base] if !defined $base;
 		 return $base + $me->[_Idx][ $off + _Min ];
 	}
 
 	sub Max {
 		 my( $me, $seq, $base )= @_;
-		 $me->_ChkPos(***REMOVED***
-		 my $off= $me->_ChkSeq($seq***REMOVED***
+		 $me->_ChkPos();
+		 my $off= $me->_ChkSeq($seq);
 		 $base= $me->[_Base] if !defined $base;
 		 return $base + $me->[_Idx][ $off ] -1;
 	}
 
 	sub Range {
 		 my( $me, $seq, $base )= @_;
-		 $me->_ChkPos(***REMOVED***
-		 my $off = $me->_ChkSeq($seq***REMOVED***
+		 $me->_ChkPos();
+		 my $off = $me->_ChkSeq($seq);
 		 if( !wantarray ) {
 			  return  $me->[_Idx][ $off ]
 					-   $me->[_Idx][ $off + _Min ];
 		 }
 		 $base= $me->[_Base] if !defined $base;
 		 return  ( $base + $me->[_Idx][ $off + _Min ] )
-			  ..  ( $base + $me->[_Idx][ $off ] - 1 ***REMOVED***
+			  ..  ( $base + $me->[_Idx][ $off ] - 1 );
 	}
 
 	sub Items {
 		 my( $me, $seq )= @_;
-		 $me->_ChkPos(***REMOVED***
-		 my $off = $me->_ChkSeq($seq***REMOVED***
+		 $me->_ChkPos();
+		 my $off = $me->_ChkSeq($seq);
 		 if( !wantarray ) {
 			  return  $me->[_Idx][ $off ]
 					-   $me->[_Idx][ $off + _Min ];
@@ -1760,10 +1760,10 @@ Irssi::command_bind(
 
 	sub Same {
 		 my( $me )= @_;
-		 $me->_ChkPos(***REMOVED***
+		 $me->_ChkPos();
 		 return wantarray ? () : 0
-			  if  $me->[_Same] != ( 1 & $me->[_Pos] ***REMOVED***
-		 return $me->Items(1***REMOVED***
+			  if  $me->[_Same] != ( 1 & $me->[_Pos] );
+		 return $me->Items(1);
 	}
 
 	my %getName;
@@ -1775,12 +1775,12 @@ Irssi::command_bind(
 			  max  => \&Max,
 			  range=> \&Range,
 			  items=> \&Items, # same thing
-		 ***REMOVED***
+		 );
 
 	sub Get
 	{
 		 my $me= shift @_;
-		 $me->_ChkPos(***REMOVED***
+		 $me->_ChkPos();
 		 my @value;
 		 for my $arg (  @_  ) {
 			  for my $word (  split ' ', $arg  ) {
@@ -1788,15 +1788,15 @@ Irssi::command_bind(
 					if(     $word !~ /^(-?\d+)?([a-zA-Z]+)([12])?$/
 						 ||  not  $meth= $getName{ lc $2 }
 					) {
-						 Die( $Root, ", Get: Invalid request ($word)" ***REMOVED***
+						 Die( $Root, ", Get: Invalid request ($word)" );
 					}
-					my( $base, $name, $seq )= ( $1, $2, $3 ***REMOVED***
+					my( $base, $name, $seq )= ( $1, $2, $3 );
 					push @value, scalar(
 						 4 == length($name)
 							  ? $meth->( $me )
 							  : $meth->( $me, $seq, $base )
-					***REMOVED***
-			***REMOVED***
+					);
+			  }
 		 }
 		 if(  wantarray  ) {
 			  return @value;
@@ -1804,26 +1804,26 @@ Irssi::command_bind(
 			  return $value[0];
 		 }
 		 Die( 0+@value, " values requested from ",
-			  $Root, "'s Get in scalar context" ***REMOVED***
+			  $Root, "'s Get in scalar context" );
 	}
 
 
-	my $Obj= getObjPkg($Root***REMOVED***
+	my $Obj= getObjPkg($Root);
 	no strict 'refs';
 
 	for my $meth (  qw( new getObjPkg )  ) {
-		 *{$Root."::".$meth} = \&{$meth***REMOVED***
-		 *{$Obj ."::".$meth} = \&{$meth***REMOVED***
+		 *{$Root."::".$meth} = \&{$meth};
+		 *{$Obj ."::".$meth} = \&{$meth};
 	}
 	for my $meth (  qw(
 		 Next Prev Reset Copy Base Diff
 		 Same Items Range Min Max Get
 		 _ChkPos _ChkSeq
 	)  ) {
-		 *{$Obj."::".$meth} = \&{$meth***REMOVED***
+		 *{$Obj."::".$meth} = \&{$meth};
 	}
 
-***REMOVED***
+};
 {
 	package Algorithm::LCSS;
 
@@ -1837,7 +1837,7 @@ Irssi::command_bind(
 
 	sub CSS {
 		 my $is_array = ref $_[0] eq 'ARRAY' ? 1 : 0;
-		 my ( $seq1, $seq2, @match, $from_match ***REMOVED***
+		 my ( $seq1, $seq2, @match, $from_match );
 		 my $i = 0;
 		 if ( $is_array ) {
 			  $seq1 = $_[0];
@@ -1846,22 +1846,22 @@ Irssi::command_bind(
 					MATCH => sub { push @{$match[$i]}, $seq1->[$_[0]]; $from_match = 1 },
 					DISCARD_A => sub { do{$i++; $from_match = 0} if $from_match },
 					DISCARD_B => sub { do{$i++; $from_match = 0} if $from_match },
-			***REMOVED******REMOVED***
+			  });
 		 }
 		 else {
-			  $seq1 = _tokenize($_[0]***REMOVED***
-			  $seq2 = _tokenize($_[1]***REMOVED***
+			  $seq1 = _tokenize($_[0]);
+			  $seq2 = _tokenize($_[1]);
 			  traverse_sequences( $seq1, $seq2, {
 					MATCH => sub { $match[$i] .= $seq1->[$_[0]]; $from_match = 1 },
 					DISCARD_A => sub { do{$i++; $from_match = 0} if $from_match },
 					DISCARD_B => sub { do{$i++; $from_match = 0} if $from_match },
-			***REMOVED******REMOVED***
+			  });
 		 }
 	  return \@match;
 	}
 
 	sub CSS_Sorted {
-		 my $match = CSS(@_***REMOVED***
+		 my $match = CSS(@_);
 		 if ( ref $_[0] eq 'ARRAY' ) {
 			 @$match = map{$_->[0]}sort{$b->[1]<=>$a->[1]}map{[$_,scalar(@$_)]}@$match
 		 }
@@ -1873,37 +1873,37 @@ Irssi::command_bind(
 
 	sub LCSS {
 		 my $is_array = ref $_[0] eq 'ARRAY' ? 1 : 0;
-		 my $css = CSS(@_***REMOVED***
+		 my $css = CSS(@_);
 		 my $index;
 		 my $length = 0;
 		 if ( $is_array ) {
 			  for( my $i = 0; $i < @$css; $i++ ) {
 					next unless @{$css->[$i]}>$length;
 					$index = $i;
-					$length = @{$css->[$i]***REMOVED***
-			***REMOVED***
+					$length = @{$css->[$i]};
+			  }
 		 }
 		 else {
 			  for( my $i = 0; $i < @$css; $i++ ) {
 					next unless length($css->[$i])>$length;
 					$index = $i;
-					$length = length($css->[$i]***REMOVED***
-			***REMOVED***
+					$length = length($css->[$i]);
+			  }
 		 }
 	  return $css->[$index];
 	}
 
-***REMOVED***
+};
 
 # Class::Classless module (from CPAN)
 {
 	package Class::Classless;
 	use strict;
-	use vars qw(@ISA***REMOVED***
+	use vars qw(@ISA);
 	use Carp;
 
-	@ISA = (***REMOVED***
-	@Class::Classless::X::ISA = (***REMOVED***
+	@ISA = ();
+	@Class::Classless::X::ISA = ();
 
 	sub Class::Classless::X::AUTOLOAD {
 	  my $it = shift @_;
@@ -1927,16 +1927,16 @@ Irssi::command_bind(
 	  # Get the linearization of the ISA tree
 	  if($prevstate) {
 		 $lineage = $prevstate->[2];
-	***REMOVED*** elsif(defined $it->{'ISA_CACHE'} and ref $it->{'ISA_CACHE'} ){
-		 $lineage = $it->{'ISA_CACHE'***REMOVED***
-	***REMOVED*** else {
+	  } elsif(defined $it->{'ISA_CACHE'} and ref $it->{'ISA_CACHE'} ){
+		 $lineage = $it->{'ISA_CACHE'};
+	  } else {
 		 $lineage = [ &Class::Classless::X::ISA_TREE($it) ];
-	***REMOVED***
+	  }
 
 	  for(; $i < @$lineage; ++$i) {
 
 		 if( !defined($no_fail) and exists($lineage->[$i]{'NO_FAIL'}) ) {
-			$no_fail = ($lineage->[$i]{'NO_FAIL'} || 0***REMOVED***
+			$no_fail = ($lineage->[$i]{'NO_FAIL'} || 0);
 			# so the first NO_FAIL sets it
 		 }
 
@@ -1944,7 +1944,7 @@ Irssi::command_bind(
 			&& exists($lineage->[$i]{'METHODS'}{$m})
 		 ){
 			# We found what we were after.  Now see what to do with it.
-			my $v = $lineage->[$i]{'METHODS'}{$m***REMOVED***
+			my $v = $lineage->[$i]{'METHODS'}{$m};
 			return $v unless defined $v and ref $v;
 
 			if(ref($v) eq 'CODE') { # normal case, I expect!
@@ -1957,24 +1957,24 @@ Irssi::command_bind(
 						 'Class::Classless::CALLSTATE'
 						),                # $_[1]    -- the callstate
 			  ;
-			  goto &{ $v ***REMOVED*** # yes, magic goto!  bimskalabim!
+			  goto &{ $v }; # yes, magic goto!  bimskalabim!
 			}
 			return @$v if ref($v) eq '_deref_array';
 			return $$v if ref($v) eq '_deref_scalar';
 			return $v; # fallthru
 		 }
-	***REMOVED***
+	  }
 
 	  if($m eq 'DESTROY') { # mitigate DESTROY-lookup failure at global destruction
 		 # should be impossible
-	***REMOVED*** else {
+	  } else {
 		 if($no_fail || 0) {
 			return;
 		 }
 		 croak "Can't find ", $prevstate ? 'NEXT method' : 'method',
 				 " $m in ", $it->{'NAME'} || $it,
 				 " or any ancestors\n";
-	***REMOVED***
+	  }
 	}
 
 	sub Class::Classless::X::DESTROY {
@@ -1988,21 +1988,21 @@ Irssi::command_bind(
 	  if(exists($_[0]{'ISA_CACHE'})) {
 		 return    @{$_[0]{'ISA_CACHE'}}
 		  if defined $_[0]{'ISA_CACHE'}
-			  and ref $_[0]{'ISA_CACHE'***REMOVED***
+			  and ref $_[0]{'ISA_CACHE'};
 
 		 # Otherwise, if exists but is not a ref, it's a signal that it should
 		 #  be replaced at the earliest, with a listref
 		 $set_cache = 1;
-	***REMOVED***
+	  }
 
 	  my $has_mi = 0; # set to 0 on the first node we see with 2 parents!
 	  # First, just figure out what's in the tree.
-	  my %last_child = ($_[0] => 1***REMOVED*** # as if already seen
+	  my %last_child = ($_[0] => 1); # as if already seen
 
 	  my @tree_nodes;
-	***REMOVED***
+	  {
 		 my $current;
-		 my @in_stack = ($_[0]***REMOVED***
+		 my @in_stack = ($_[0]);
 		 while(@in_stack) {
 			next unless
 			 defined($current = shift @in_stack)
@@ -2018,12 +2018,12 @@ Irssi::command_bind(
 			  map {
 				 if(exists $last_child{$_}) { # seen before!
 					$last_child{$_} = $current;
-					(***REMOVED*** # seen -- don't re-explore
+					(); # seen -- don't re-explore
 				 } else { # first time seen
 					$last_child{$_} = $current;
 					$_; # first time seen -- explore now
 				 }
-			***REMOVED***
+			  }
 			  @{$current->{'PARENTS'}}
 			;
 		 }
@@ -2035,14 +2035,14 @@ Irssi::command_bind(
 		 }
 
 		 # Otherwise, toss this list and rescan, consulting %last_child
-	***REMOVED***
+	  }
 
 	  my @out;
-	***REMOVED***
+	  {
 		 my $current;
-		 my @in_stack = ($_[0]***REMOVED***
+		 my @in_stack = ($_[0]);
 		 while(@in_stack) {
-			next unless defined($current = shift @in_stack) && ref($current***REMOVED***
+			next unless defined($current = shift @in_stack) && ref($current);
 			push @out, $current; # finally.
 			unshift
 			  @in_stack,
@@ -2063,7 +2063,7 @@ Irssi::command_bind(
 		 unless(scalar(@out) == scalar(keys(%last_child))) {
 			# the counts should be equal
 			my %good_ones;
-			@good_ones{@out} = (***REMOVED***
+			@good_ones{@out} = ();
 			croak
 			  "ISA tree for " .
 			  ($_[0]{'NAME'} || $_[0]) .
@@ -2072,7 +2072,7 @@ Irssi::command_bind(
 				 values(%last_child) )
 			  . "\n";
 		 }
-	***REMOVED***
+	  }
 
 	  $_[0]{'ISA_CACHE'} = \@out if $set_cache;
 	  return @out;
@@ -2082,26 +2082,26 @@ Irssi::command_bind(
 	  my($it, $m) = @_[0,1];
 	  return undef unless ref $it;
 
-	  croak "undef is not a valid method name"       unless defined($m***REMOVED***
-	  croak "null-string is not a valid method name" unless length($m***REMOVED***
+	  croak "undef is not a valid method name"       unless defined($m);
+	  croak "null-string is not a valid method name" unless length($m);
 
 	  foreach my $o (&Class::Classless::X::ISA_TREE($it)) {
 		 return 1
 		  if  ref($o->{'METHODS'} || 0)   # sanity
-			&& exists $o->{'METHODS'}{$m***REMOVED***
-	***REMOVED***
+			&& exists $o->{'METHODS'}{$m};
+	  }
 
 	  return 0;
 	}
 
 	sub Class::Classless::X::isa { # Like UNIVERSAL::isa
-	  return unless ref($_[0]) && ref($_[1]***REMOVED***
-	  return scalar(grep {$_ eq $_[1]} &Class::Classless::X::ISA_TREE($_[0])***REMOVED*** 
+	  return unless ref($_[0]) && ref($_[1]);
+	  return scalar(grep {$_ eq $_[1]} &Class::Classless::X::ISA_TREE($_[0])); 
 	}
 
 	sub nodelist { join ', ', map { "" . ($_->{'NAME'} || $_) . ""} @_ }
 
-	@Class::Classless::ISA = (***REMOVED***
+	@Class::Classless::ISA = ();
 	sub Class::Classless::CALLSTATE::found_name { $_[0][0] }
 		#  the method name called and found
 	sub Class::Classless::CALLSTATE::found_depth { $_[0][1] }
@@ -2110,18 +2110,18 @@ Irssi::command_bind(
 		#  my lineage
 	sub Class::Classless::CALLSTATE::target { $_[0][2][  0          ] }
 		#  the object that's the target -- same as $_[0] for the method called
-	sub Class::Classless::CALLSTATE::home ***REMOVED*** $_[0][2][  $_[0][1]   ] }
+	sub Class::Classless::CALLSTATE::home   { $_[0][2][  $_[0][1]   ] }
 		#  the object I was found in
 	sub Class::Classless::CALLSTATE::sub_found {
 	  $_[0][2][  $_[0][1]   ]{'METHODS'}{ $_[0][0] }
 	}  #  the routine called
 
-	sub Class::Classless::CALLSTATE::no_fail        ***REMOVED***  $_[0][3]       ***REMOVED***
-	sub Class::Classless::CALLSTATE::set_no_fail_true {  $_[0][3] = 1   ***REMOVED***
-	sub Class::Classless::CALLSTATE::set_fail_false ***REMOVED***  $_[0][3] = 0   ***REMOVED***
-	sub Class::Classless::CALLSTATE::set_fail_undef ***REMOVED***  $_[0][3] = undef }
+	sub Class::Classless::CALLSTATE::no_fail          {  $_[0][3]         }
+	sub Class::Classless::CALLSTATE::set_no_fail_true {  $_[0][3] = 1     }
+	sub Class::Classless::CALLSTATE::set_fail_false   {  $_[0][3] = 0     }
+	sub Class::Classless::CALLSTATE::set_fail_undef   {  $_[0][3] = undef }
 
-	sub Class::Classless::CALLSTATE::via_next       ***REMOVED***  $_[0][4] }
+	sub Class::Classless::CALLSTATE::via_next         {  $_[0][4] }
 
 	sub Class::Classless::CALLSTATE::NEXT {
 	  my $cs = shift @_;
@@ -2131,10 +2131,10 @@ Irssi::command_bind(
 	  ($cs->[2][0])->$m(
 		 bless( \$cs, 'Class::Classless::CALLSTATE::SHIMMY' ),
 		 @_
-	  ***REMOVED***
+	  );
 	}
 
-***REMOVED***
+};
 1
 
 # Credits & Thanks

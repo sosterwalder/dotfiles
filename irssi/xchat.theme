@@ -39,7 +39,7 @@ info_eol = "false";
 
 # these characters are automatically replaced with specified color
 # (dark grey by default)
-#replaces = { "[]=" = "%b$*%n"; ***REMOVED***
+#replaces = { "[]=" = "%b$*%n"; };
 
 abstracts = {
 
@@ -173,7 +173,7 @@ abstracts = {
   sb_act_hilight_color = "$0$1-%w";
 
   indent_default = "                       %K|%n ";
-***REMOVED***
+};
 formats = {
   "fe-text" = {
     lastlog_too_long = "                      %w-%c-%C- %K| %W/LASTLOG %nwould print %C$0 %nlines.  Use the -force option to print all of them.";
@@ -193,7 +193,7 @@ formats = {
     Window_info_scroll = "           %w-%c-%C- %K| %WWindow: %nWindow Scroll   : $0";
     paste_warning = "           %w-%c-%C- %K| %rWARNING: %nTrying to paste %C$0%n lines to %W$1%n.";
     paste_prompt = "%RPress Ctrl-K to continue, Ctrl-C to abort.";
-***REMOVED***;
+  };
   "fe-common/core" = {
     line_start_irssi = "";
     join = "           %w-%c-%C> %K|%n {channick_hilight $0} {chanhost_hilight $1} has joined %c{channel $2}";
@@ -359,7 +359,7 @@ formats = {
     talking_in = "      %b{fq Irssi}%n | %bYou are now talking in %W$0";
     not_in_channels = "   %b{fq Channels}%n | %bYou are not on any channels";
     current_channel = "   %b{fq Channels}%n | %bCurrent channel $0";
-***REMOVED***;
+  };
   "fe-common/irc" = {
     usermode_change = "           %w-%c-%C- %K| %nMode change %C{mode $0}%n for user {nick $1}";
     ircnet_added = "           %w-%c-%C- %K| %WIRCnet %W{hilight $0} %nsaved";
@@ -438,7 +438,7 @@ formats = {
     ctcp_requested = "           %w-%c-%C- %K| %nGot %C$2 %nrequest from %W$0 %n($1) to $4: $3";
     ctcp_requested_unknown = "           %w-%c-%C- %K| %nGot unknown %C$2%n request from %c$0 %n($1) to %n$4: $3";
     own_ctcp = "           %w-%c-%C- %K| %nSending %WCTCP %C$1 %nto %c$0: $2";
-***REMOVED***;
+  };
   "fe-common/perl" = {
     script_not_found = "           %w-%c-%C- %K| %rScript: %W{hilight $0} %nnot found";
     script_not_loaded = "           %w-%c-%C- %K| %rScript: %W{hilight $0} is not loaded";
@@ -449,7 +449,7 @@ formats = {
     script_list_line = "           %w-%c-%C- %K| %n$[!20]0 $1";
     script_list_footer = "";
     script_error = "           %w-%c-%C- %K| %rScript: ERROR %n in script %W{hilight $0}:";
-***REMOVED***;
+  };
 
   "fe-common/irc/notifylist" = {
     notify_join = "           %w-%c-%C- %K| %WNotify: %W{hilight $0} %C($1@$2) [$3] %nhas connected to %C$4";
@@ -461,5 +461,5 @@ formats = {
     notify_offline = "           %w-%c-%C- %K| %WNotify: %WOffline: $0";
     notify_list = "           %w-%c-%C- %K| %n#$0: $1 $2 $3";
     notify_list_empty = "           %w-%c-%C- %K| %WNotify: %nThe notify list is empty";
-***REMOVED***;
-***REMOVED***
+  };
+};

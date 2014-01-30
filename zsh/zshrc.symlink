@@ -178,7 +178,7 @@ if isgrml ; then
             return 0
         fi
         return 1
-  ***REMOVED***
+    }
 else
     isgrmlsmall() { return 1 }
 fi
@@ -434,7 +434,7 @@ salias() {
     fi
 
     key="${1%%\=*}" ;  val="${1#*\=}"
-    if (( EUID == 0 )) && (( only == 0 )***REMOVED*** then
+    if (( EUID == 0 )) && (( only == 0 )); then
         alias -- "${key}=${val}"
     elif (( EUID > 0 )) ; then
         (( multi > 0 )) && val="${val// ; / ; sudo }"
@@ -465,7 +465,7 @@ if ! is42 ; then
         done
 
         builtin print -l $u
-  ***REMOVED***
+    }
 fi
 
 # Check if we can read given files and source those we can.
@@ -516,7 +516,7 @@ zrclocal() {
 }
 
 # locale setup
-if (( ZSH_NO_DEFAULT_LOCALE == 0 )***REMOVED*** then
+if (( ZSH_NO_DEFAULT_LOCALE == 0 )); then
     xsource "/etc/default/locale"
 fi
 
@@ -726,7 +726,7 @@ grmlcomp() {
     _force_rehash() {
         (( CURRENT == 1 )) && rehash
         return 1
-  ***REMOVED***
+    }
 
     ## correction
     # some people don't like the automatic correction - so run 'NOCOR=1 zsh' to deactivate it
@@ -811,7 +811,7 @@ beginning-or-end-of-somewhere() {
         zle .${WIDGET:s/somewhere/buffer-or-history/} "$@"
     else
         zle .${WIDGET:s/somewhere/line-hist/} "$@"
-        if (( HISTNO != hno )***REMOVED*** then
+        if (( HISTNO != hno )); then
             zle .${WIDGET:s/somewhere/buffer-or-history/} "$@"
         fi
     fi
@@ -1049,15 +1049,15 @@ help-show-abk()
 zle -N help-show-abk
 
 # press "ctrl-e d" to insert the actual date in the form yyyy-mm-dd
-insert-datestamp() { LBUFFER+=${(%):-'%D{%Y-%m-%d}'***REMOVED*** }
+insert-datestamp() { LBUFFER+=${(%):-'%D{%Y-%m-%d}'}; }
 zle -N insert-datestamp
 
 # press esc-m for inserting last typed word again (thanks to caphuso!)
-insert-last-typed-word() { zle insert-last-word -- 0 -1 ***REMOVED***
+insert-last-typed-word() { zle insert-last-word -- 0 -1 };
 zle -N insert-last-typed-word;
 
 function grml-zsh-fg() {
-  if (( ${#jobstates} )***REMOVED*** then
+  if (( ${#jobstates} )); then
     zle .push-input
     [[ -o hist_ignore_space ]] && BUFFER=' ' || BUFFER=''
     BUFFER="${BUFFER}fg"
@@ -1099,7 +1099,7 @@ inplaceMkDirs() {
     # Use case: you type "mv abc ~/testa/testb/testc/" and remember that the
     # directory does not exist yet -> press ctrl-XM and problem solved
     local PATHTOMKDIR
-    if ((REGION_ACTIVE==1)***REMOVED*** then
+    if ((REGION_ACTIVE==1)); then
         local F=$MARK T=$CURSOR
         if [[ $F -gt $T ]]; then
             F=${CURSOR}
@@ -1220,7 +1220,7 @@ help_zle_parse_keybindings()
     local kstrlen=0
     for k (${(k)help_zle_keybindings[@]}) ((kstrlen < ${#k})) && kstrlen=${#k}
     #convert the assoc array into preformated lines, which we are able to sort
-    for k v in ${(kv)help_zle_keybindings[@]***REMOVED*** do
+    for k v in ${(kv)help_zle_keybindings[@]}; do
         #pad keybinding-string to kstrlen chars and remove outermost characters (i.e. the quotes)
         help_zle_lines+=("${(r:kstrlen:)k[2,-2]}${v}")
     done
@@ -1259,7 +1259,7 @@ if check_com -c screen || check_com -c tmux; then
         trap "rm -f $TMPFILE" EXIT
 
         # fill array with contents from screen hardcopy
-        if ((${+TMUX})***REMOVED*** then
+        if ((${+TMUX})); then
             #works, but crashes tmux below version 1.4
             #luckily tmux -V option to ask for version, was also added in 1.4
             tmux -V &>/dev/null || return
@@ -1274,7 +1274,7 @@ if check_com -c screen || check_com -c tmux; then
         # remove PREFIX to be completed from that array
         _screen_display_wordlist[${_screen_display_wordlist[(i)$PREFIX]}]=""
         compadd -a _screen_display_wordlist
-  ***REMOVED***
+    }
     #m# k CTRL-x\,\,\,S Complete word from GNU screen buffer
     bindkey -r "^xS"
     compdef -k _complete_screen_display complete-word '^xS'
@@ -1312,7 +1312,7 @@ zstyle ':completion:hist-complete:*' completer _history
 typeset -ga grml_missing_features
 
 function zrcbindkey() {
-    if (( ARGC )) && zrcgotwidget ${argv[-1]***REMOVED*** then
+    if (( ARGC )) && zrcgotwidget ${argv[-1]}; then
         bindkey "$@"
     fi
 }
@@ -1342,21 +1342,21 @@ function bind2maps () {
     done
 }
 
-if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )***REMOVED*** then
+if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
     function zle-smkx () {
         emulate -L zsh
         printf '%s' ${terminfo[smkx]}
-  ***REMOVED***
+    }
     function zle-rmkx () {
         emulate -L zsh
         printf '%s' ${terminfo[rmkx]}
-  ***REMOVED***
+    }
     function zle-line-init () {
         zle-smkx
-  ***REMOVED***
+    }
     function zle-line-finish () {
         zle-rmkx
-  ***REMOVED***
+    }
     zle -N zle-line-init
     zle -N zle-line-finish
 else
@@ -1454,7 +1454,7 @@ bind2maps emacs viins       -- -s '^x1' jump_after_first_word
 bind2maps emacs viins       -- -s "^x^x" hist-complete
 
 # insert unicode character
-# usage example: 'ctrl-x i' 00A7 'ctrl-x i' will give you an ï¿½
+# usage example: 'ctrl-x i' 00A7 'ctrl-x i' will give you an §
 # See for example http://unicode.org/charts/ for unicode characters code
 #k# Insert Unicode character
 bind2maps emacs viins       -- -s '^xi' insert-unicode-char
@@ -1527,7 +1527,7 @@ alias url-quote='autoload -U url-quote-magic ; zle -N self-insert url-quote-magi
 
 #m# k ESC-h Call \kbd{run-help} for the 1st word on the command line
 alias run-help >&/dev/null && unalias run-help
-for rh in run-help{,-git,-svk,-svn***REMOVED*** do
+for rh in run-help{,-git,-svk,-svn}; do
     zrcautoload $rh
 done; unset rh
 
@@ -1593,7 +1593,7 @@ function chpwd_profiles() {
     zstyle -s "$context" profile profile || profile='default'
     zstyle -T "$context" re-execute && reexecute=1 || reexecute=0
 
-    if (( ${+parameters[CHPWD_PROFILE]} == 0 )***REMOVED*** then
+    if (( ${+parameters[CHPWD_PROFILE]} == 0 )); then
         typeset -g CHPWD_PROFILE
         local CHPWD_PROFILES_INIT=1
         (( ${+functions[chpwd_profiles_init]} )) && chpwd_profiles_init
@@ -1691,7 +1691,7 @@ if zrcautoload vcs_info; then
         function VCS_INFO_realpath () {
             setopt localoptions NO_shwordsplit chaselinks
             ( builtin cd -q $1 2> /dev/null && pwd; )
-      ***REMOVED***
+        }
     fi
 
     zstyle ':vcs_info:*' max-exports 2
@@ -1909,7 +1909,7 @@ grml_prompt_token_default=(
 )
 
 function grml_theme_has_token () {
-    if (( ARGC != 1 )***REMOVED*** then
+    if (( ARGC != 1 )); then
         printf 'usage: grml_theme_has_token <name>\n'
         return 1
     fi
@@ -1953,7 +1953,7 @@ function GRML_theme_add_token_usage () {
 
       function virtual_env_prompt () {
         REPLY=\${VIRTUAL_ENV+\${VIRTUAL_ENV:t} }
-    ***REMOVED***
+      }
       grml_theme_add_token virtual-env -f virtual_env_prompt
 
     After that, you will be able to use a changed \`items' style to
@@ -1966,7 +1966,7 @@ function grml_theme_add_token () {
     local name token pre post
     local -i init funcall
 
-    if (( ARGC == 0 )***REMOVED*** then
+    if (( ARGC == 0 )); then
         GRML_theme_add_token_usage
         return 0
     fi
@@ -1985,7 +1985,7 @@ function grml_theme_add_token () {
         shift
     fi
 
-    if (( ARGC == 0 )***REMOVED*** then
+    if (( ARGC == 0 )); then
         printf '
 grml_theme_add_token: No token-string/function-name provided!\n\n'
         GRML_theme_add_token_usage
@@ -1993,13 +1993,13 @@ grml_theme_add_token: No token-string/function-name provided!\n\n'
     fi
     token=$1
     shift
-    if (( ARGC != 0 && ARGC != 2 )***REMOVED*** then
+    if (( ARGC != 0 && ARGC != 2 )); then
         printf '
 grml_theme_add_token: <pre> and <post> need to by specified _both_!\n\n'
         GRML_theme_add_token_usage
         return 1
     fi
-    if (( ARGC )***REMOVED*** then
+    if (( ARGC )); then
         pre=$1
         post=$2
         shift 2
@@ -2011,13 +2011,13 @@ grml_theme_add_token: Token `%s'\'' exists! Giving up!\n\n' $name
         GRML_theme_add_token_usage
         return 2
     fi
-    if (( init )***REMOVED*** then
+    if (( init )); then
         $token $name
         token=$REPLY
     fi
     grml_prompt_pre_default[$name]=$pre
     grml_prompt_post_default[$name]=$post
-    if (( funcall )***REMOVED*** then
+    if (( funcall )); then
         grml_prompt_token_function[$name]=$token
         grml_prompt_token_default[$name]=23
     else
@@ -2032,7 +2032,7 @@ function grml_typeset_and_wrap () {
     local left="$3"
     local right="$4"
 
-    if (( ${+parameters[$new]} )***REMOVED*** then
+    if (( ${+parameters[$new]} )); then
         typeset -g "${target}=${(P)target}${left}${(P)new}${right}"
     fi
 }
@@ -2055,7 +2055,7 @@ function grml_prompt_addto () {
         zstyle -s ":prompt:${grmltheme}:${lr}:items:$it" token new \
             || new=${grml_prompt_token_default[$it]}
         typeset -g "${target}=${(P)target}${apre}"
-        if (( ${+grml_prompt_token_function[$it]} )***REMOVED*** then
+        if (( ${+grml_prompt_token_function[$it]} )); then
             ${grml_prompt_token_function[$it]} $it
             typeset -g "${target}=${(P)target}${REPLY}"
         else
@@ -2073,7 +2073,7 @@ function grml_prompt_addto () {
                 ;;
             vcs)
                 v="vcs_info_msg_${new}_"
-                if (( ! vcscalled )***REMOVED*** then
+                if (( ! vcscalled )); then
                     vcs_info
                     vcscalled=1
                 fi
@@ -2133,11 +2133,11 @@ grml_prompt_fallback() {
     setopt prompt_subst
     precmd() {
         (( ${+functions[vcs_info]} )) && vcs_info
-  ***REMOVED***
+    }
 
     p0="${RED}%(?..%? )${WHITE}${debian_chroot:+($debian_chroot)}"
     p1="${BLUE}%n${NO_COLOR}@%m %40<...<%B%~%b%<< "'${vcs_info_msg_0_}'"%# "
-    if (( EUID == 0 )***REMOVED*** then
+    if (( EUID == 0 )); then
         PROMPT="${BLUE}${p0}${RED}${p1}"
     else
         PROMPT="${RED}${p0}${BLUE}${p1}"
@@ -2173,7 +2173,7 @@ if is437; then
         done
         unset i
         zstyle ':prompt:grml(|-large|-chroot):right:setup' use-rprompt false
-    elif (( EUID == 0 )***REMOVED*** then
+    elif (( EUID == 0 )); then
         zstyle ':prompt:grml(|-large|-chroot):*:items:user' pre '%B%F{red}'
     fi
 
@@ -2474,7 +2474,7 @@ See #377109 in the BTS of Debian for more details.
 Please use the wodim binary instead
 EOMESS
             return 1
-      ***REMOVED***
+        }
     fi
 fi
 
@@ -2492,7 +2492,7 @@ grmlstuff() {
             echo "Please use 915resolution as resolution modifying tool for Intel \
 graphic chipset."
             return -1
-      ***REMOVED***
+        }
     fi
 
     #a1# Output version of running grml
@@ -2502,7 +2502,7 @@ graphic chipset."
         debian2hd() {
             echo "Installing debian to harddisk is possible by using grml-debootstrap."
             return 1
-      ***REMOVED***
+        }
     fi
 }
 
@@ -2531,7 +2531,7 @@ is4 && nt() {
 # shell functions
 
 #f1# Reload an autoloadable function
-freload() { while (( $# )***REMOVED*** do; unfunction $1; autoload -U $1; shift; done }
+freload() { while (( $# )); do; unfunction $1; autoload -U $1; shift; done }
 compdef _functions freload
 
 #f1# List symlinks in detail (more detailed version of 'readlink -f' and 'whence -s')
@@ -2569,7 +2569,7 @@ if check_com -c $PAGER ; then
                 return 1
             fi
         fi
-  ***REMOVED***
+    }
     _dchange() { _files -W /usr/share/doc -/ }
     compdef _dchange dchange
 
@@ -2586,7 +2586,7 @@ if check_com -c $PAGER ; then
                 return 1
             fi
         fi
-  ***REMOVED***
+    }
     _dnews() { _files -W /usr/share/doc -/ }
     compdef _dnews dnews
 
@@ -2599,7 +2599,7 @@ if check_com -c $PAGER ; then
             echo "No copyright file for package $1 found, sorry."
             return 1
         fi
-  ***REMOVED***
+    }
     _dcopyright() { _files -W /usr/share/doc -/ }
     compdef _dcopyright dcopyright
 
@@ -2612,7 +2612,7 @@ if check_com -c $PAGER ; then
             echo "No changelog for package $1 found, sorry."
             return 1
         fi
-  ***REMOVED***
+    }
     _uchange() { _files -W /usr/share/doc -/ }
     compdef _uchange uchange
 fi
@@ -2664,13 +2664,13 @@ if [[ -d /etc/init.d || -d /etc/service ]] ; then
             # sysvinit
             $SUDO "/etc/init.d/$service_" "${action_}" "$param_"
         fi
-  ***REMOVED***
+    }
 
     _grmlinitd() {
         local -a scripts
         scripts=( /etc/init.d/*(x:t) )
         _describe "service startup script" scripts
-  ***REMOVED***
+    }
 
     for i in Start Restart Stop Force-Reload Reload Status ; do
         eval "$i() { __start_stop $i \"\$1\" \"\$2\" ; }"
@@ -2751,7 +2751,7 @@ deswap() {
 if check_com vim; then
     vim() {
         VIM_PLEASE_SET_TITLE='yes' command vim ${VIM_OPTIONS} "$@"
-  ***REMOVED***
+    }
 fi
 
 # make a backup of a file
@@ -2761,7 +2761,7 @@ bk() {
 
 ssl_hashes=( sha512 sha256 sha1 md5 )
 
-for sh in ${ssl_hashes***REMOVED*** do
+for sh in ${ssl_hashes}; do
     eval 'ssl-cert-'${sh}'() {
         emulate -L zsh
         if [[ -z $1 ]] ; then
@@ -2769,7 +2769,7 @@ for sh in ${ssl_hashes***REMOVED*** do
             return 1
         fi
         openssl x509 -noout -fingerprint -'${sh}' -in $1
-  ***REMOVED***'
+    }'
 done; unset sh
 
 ssl-cert-fingerprints() {
@@ -2908,7 +2908,7 @@ cd() {
 
 #f5# Create Directoy and \kbd{cd} to it
 mkcd() {
-    if (( ARGC != 1 )***REMOVED*** then
+    if (( ARGC != 1 )); then
         printf 'usage: mkcd <new-directory>\n'
         return 1;
     fi
@@ -3056,7 +3056,7 @@ simple-extract() {
                 ;;
         esac
 
-        if ! check_com ${DECOMP_CMD[(w)1]***REMOVED*** then
+        if ! check_com ${DECOMP_CMD[(w)1]}; then
             echo "ERROR: ${DECOMP_CMD[(w)1]} not installed." >&2
             RC=$((RC+2))
             continue
@@ -3211,7 +3211,7 @@ function zurl() {
 }
 
 #f2# Find history events by search pattern and list them by date.
-whatwhen()***REMOVED***
+whatwhen()  {
     emulate -L zsh
     local usage help ident format_l format_s first_char remain first last
     usage='USAGE: whatwhen [options] <searchstring> <search range>'
@@ -3266,7 +3266,7 @@ if check_com -c hg ; then
     hgdi() {
         emulate -L zsh
         for i in $(hg status -marn "$@") ; diff -ubwd <(hg cat "$i") "$i"
-  ***REMOVED***
+    }
 
     # build debian package
     #a2# Alias for \kbd{hg-buildpackage}
@@ -3282,7 +3282,7 @@ if check_com -c hg ; then
     hgstat() {
         emulate -L zsh
         [[ -n "$1" ]] && hg diff -r $1 -r tip | diffstat || hg export tip | diffstat
-  ***REMOVED***
+    }
 
 fi # end of check whether we have the 'hg'-executable
 

@@ -8,7 +8,7 @@
 
 use Irssi;
 use POSIX;
-use vars qw($VERSION %IRSSI***REMOVED*** 
+use vars qw($VERSION %IRSSI); 
 
 $VERSION = "0.02";
 %IRSSI = (
@@ -19,7 +19,7 @@ $VERSION = "0.02";
     license     => "Public Domain",
     url         => "http://irssi.org/",
     changed     => "Sun May 25 18:59:57 BST 2008"
-***REMOVED***
+);
 
 sub sig_printtext {
     my ($dest, $text, $stripped) = @_;
@@ -28,30 +28,30 @@ sub sig_printtext {
 
     if(Irssi::settings_get_bool('hilightwin_showprivmsg')) {
         $opt = MSGLEVEL_HILIGHT|MSGLEVEL_MSGS;
-  ***REMOVED***
+    }
     
     if(
         ($dest->{level} & ($opt)) &&
         ($dest->{level} & MSGLEVEL_NOHILIGHT) == 0
     ) {
-        $window = Irssi::window_find_name('hilight'***REMOVED***
+        $window = Irssi::window_find_name('hilight');
         
         if ($dest->{level} & MSGLEVEL_PUBLIC) {
             $text = $dest->{target}.": ".$text;
-      ***REMOVED***
+        }
         $text = strftime(
             Irssi::settings_get_str('timestamp_format')." ",
             localtime
         ).$text;
-        $window->print($text, MSGLEVEL_NEVER) if ($window***REMOVED***
-  ***REMOVED***
+        $window->print($text, MSGLEVEL_NEVER) if ($window);
+    }
 }
 
-$window = Irssi::window_find_name('hilight'***REMOVED***
-Irssi::print("Create a window named 'hilight'") if (!$window***REMOVED***
+$window = Irssi::window_find_name('hilight');
+Irssi::print("Create a window named 'hilight'") if (!$window);
 
-Irssi::settings_add_bool('hilightwin','hilightwin_showprivmsg',1***REMOVED***
+Irssi::settings_add_bool('hilightwin','hilightwin_showprivmsg',1);
 
-Irssi::signal_add('print text', 'sig_printtext'***REMOVED***
+Irssi::signal_add('print text', 'sig_printtext');
 
 # vim:set ts=4 sw=4 et:
