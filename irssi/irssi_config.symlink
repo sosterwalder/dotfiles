@@ -1,13 +1,5 @@
 servers = (
   {
-    address = "irc.adfinis-sygroup.ch";
-    chatnet = "adsy";
-    port = "6668";
-    password = "Ad+BlA+Sy";
-    use_ssl = "yes";
-    ssl_verify = "no";
-  },
-  {
     address = "irc.cajoue.ch";
     chatnet = "cajoue";
     port = "6667";
