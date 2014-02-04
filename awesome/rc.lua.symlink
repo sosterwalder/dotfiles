@@ -190,7 +190,7 @@ tags = {
     settings = {
         {
             --names   = { '1 ⎈⚫', '2 ✎⚫', '3 ☏⚫', '4 ⇵⚫', '5 ⎆⚫',  '6 ⛃⚫', '7 ♫⚫', '8 ✵‡', 9 },
-            names = { 1, 'www', 'mail/im', 4, 'office/reading', 6, 7, '✎', 9 }, 
+            names = { 1, 'www', 'mail', 'im', 'office/reading', 6, 7, '✎', 9 }, 
             layout  = {
                 layouts[13],    -- 1
                 layouts[10],    -- 2
@@ -294,6 +294,7 @@ kbdcfg.widget:buttons(
 )
 local kbdwidget = wibox.widget.background()
 kbdwidget:set_widget(kbdcfg.widget)
+kbdwidget:set_bg("#1a1a1a")
 
 -- WIDGETS
 -- OS info
@@ -308,7 +309,7 @@ cpuwidget = wibox.widget.background(lain.widgets.cpu({
     settings = function()
         widget:set_text(" " .. cpu_now.usage .. "% ")
     end
-}), "#313131")
+}), "#1a1a1a")
 -- Meter
 cpubar = awful.widget.progressbar()
 cpubar:set_width(50)
@@ -352,6 +353,7 @@ memwidget = lain.widgets.mem({
         widget:set_text(" " .. mem_now.used .. " MB ")
     end
 })
+memwidgetbg = wibox.widget.background(memwidget, "#313131")
 
 -- / fs
 fsicon = wibox.widget.imagebox(beautiful.widget_hdd)
@@ -360,10 +362,11 @@ fswidget = lain.widgets.fs({
         widget:set_text(" " .. fs_now.used .. "% ")
     end
 })
-fswidgetbg = wibox.widget.background(fswidget, "#313131")
+fswidgetbg = wibox.widget.background(fswidget, "#1a1a1a")
 
 -- ALSA volume
 volicon = wibox.widget.imagebox(beautiful.widget_vol)
+voliconbg = wibox.widget.background(volicon, "#313131")
 volumewidget = lain.widgets.alsa({
     settings = function()
         if volume_now.status == "off" then
@@ -379,6 +382,7 @@ volumewidget = lain.widgets.alsa({
         widget:set_text(" " .. volume_now.level .. "% ")
     end
 })
+volumewidgetbg = wibox.widget.background(volumewidget, "#313131")
 
 -- Net
 neticon = wibox.widget.imagebox(beautiful.widget_net)
@@ -490,21 +494,21 @@ for s = 1, screen.count() do
     right_layout:add(arrl_dl)
     right_layout:add(cpuicon)
     right_layout:add(cpuwidget)
-    right_layout:add(arrl_dl)
-    right_layout:add(memicon)
-    right_layout:add(memwidget)
     right_layout:add(arrl_ld)
+    right_layout:add(memicon)
+    right_layout:add(memwidgetbg)
+    right_layout:add(arrl_dl)
     right_layout:add(fsicon)
     right_layout:add(fswidget)
-    right_layout:add(arrl_dl)
+    right_layout:add(arrl_ld)
     right_layout:add(neticon)
     right_layout:add(netwidget)
-    right_layout:add(arrl_ld)
-    right_layout:add(kbdwidget)
     right_layout:add(arrl_dl)
-    right_layout:add(volicon)
-    right_layout:add(volumewidget)
+    right_layout:add(kbdwidget)
     right_layout:add(arrl_ld)
+    right_layout:add(voliconbg)
+    right_layout:add(volumewidgetbg)
+    right_layout:add(arrl_dl)
     if s == 1 then right_layout:add(wibox.widget.systray()) end
     right_layout:add(spr)
     right_layout:add(arrl_ld)
