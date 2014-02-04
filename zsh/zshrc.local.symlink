@@ -188,6 +188,8 @@ fi
 #alias -g S='| sort'
 #alias -g T='|tail'
 #alias -g V='| vim -'
+alias -g svim='sudo gvim'
+alias -g sfind='sudo find'
 
 ## instead of global aliase it might be better to use grmls $abk assoc array, whose contents are expanded after pressing ,.
 #$abk[SnL]="| sort -n | less"
@@ -338,6 +340,12 @@ export P2PMPI_HOME=/opt/p2pmpi
 export PATH=$PATH:$P2PMPI_HOME/bin
 
 # Powerline
-. /usr/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh
+. /home/sosterwalder/.local/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh
+
+# Ruby Gems
+export GEM_HOME=$HOME/.gem/ruby/2.1.0/gems
+export GEM_PATH=$GEM_HOME:/lib/ruby/gems/2.1.0 
+export GEM_CACHE=$GEM_HOME/cache
+export PATH=$PATH:$GEM_HOME/bin
 
 ## END OF FILE #################################################################
