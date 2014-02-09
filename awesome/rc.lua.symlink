@@ -105,7 +105,7 @@ end
 beautiful.init(configdir .. "/themes/powerarrow-darker/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "roxterm"
+terminal = 'urxvt -name Terminal -fn "xft:Monospace:pixelsize=12" -fade 20 +sb -depth 32'
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -871,7 +871,7 @@ run_once("/usr/bin/fehlstart")
 run_once("/usr/bin/xscreensaver -nosplash")
 run_once("/usr/bin/nm-applet")
 --run_once("/usr/bin/pnmixer")
-run_once("~/.screenlayout/default.sh")
+--run_once("~/.screenlayout/default.sh")
 run_once("parcellite")
 run_once("xfce4-power-manager")
 run_once("/usr/bin/compton --config /home/sosterwalder/.config/compton.conf -bcCGf -D1")
