@@ -105,7 +105,10 @@ end
 beautiful.init(configdir .. "/themes/powerarrow-darker/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = 'urxvt -name Terminal -fn "xft:Monospace:pixelsize=12" -fade 20 +sb -depth 32'
+--terminal = 'urxvt -name Terminal -fn "xft:Monospace:pixelsize=12" -fade 20 +sb -depth 32 -bg rgba:0000/002b/0036/dddd'
+--terminal = 'urxvt -name Terminal -fn "xft:Monospace:pixelsize=12" -fade 20 +sb -depth 32'
+--terminal = 'lilyterm'
+terminal = 'urxvt'
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -583,8 +586,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "n", awful.client.restore),
 
     -- Prompt
-    --awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
-    --awful.key({ modkey },            "r",     function () awful.util.spawn("/usr/bin/fehlstart") end),
+    awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
 
 
     awful.key({ modkey }, "x",
@@ -636,22 +638,22 @@ globalkeys = awful.util.table.join(
     -- MPD control
     awful.key({ altkey, "Control" }, "Up",
         function ()
-            awful.util.spawn_with_shell("mpc toggle || ncmpcpp toggle || ncmpc toggle || pms toggle")
+            awful.util.spawn_with_shell("mpc toggle || ncmpcpp toggle || ncmpc toggle || pms toggle || clementine -t")
             mpdwidget.update()
         end),
     awful.key({ altkey, "Control" }, "Down",
         function ()
-            awful.util.spawn_with_shell("mpc stop || ncmpcpp stop || ncmpc stop || pms stop")
+            awful.util.spawn_with_shell("mpc stop || ncmpcpp stop || ncmpc stop || pms stop || clementine -s")
             mpdwidget.update()
         end),
     awful.key({ altkey, "Control" }, "Left",
         function ()
-            awful.util.spawn_with_shell("mpc prev || ncmpcpp prev || ncmpc prev || pms prev")
+            awful.util.spawn_with_shell("mpc prev || ncmpcpp prev || ncmpc prev || pms prev || clementine -r")
             mpdwidget.update()
         end),
     awful.key({ altkey, "Control" }, "Right",
         function ()
-            awful.util.spawn_with_shell("mpc next || ncmpcpp next || ncmpc next || pms next")
+            awful.util.spawn_with_shell("mpc next || ncmpcpp next || ncmpc next || pms next || clementine -f")
             mpdwidget.update()
         end)
 )
@@ -867,7 +869,7 @@ client.add_signal("unfocus", function(c) c.border_color = beautiful.border_norma
 
 -- Run these apps once - also called autostart
 run_once("/usr/bin/easystroke")
-run_once("/usr/bin/fehlstart")
+--run_once("/usr/bin/fehlstart")
 run_once("/usr/bin/xscreensaver -nosplash")
 run_once("/usr/bin/nm-applet")
 --run_once("/usr/bin/pnmixer")
