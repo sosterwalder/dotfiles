@@ -4,10 +4,11 @@ URxvt.cursorBlink: true
 URxvt.underlineColor: yellow
 URxvt.font:  xft:inconsolata:size=12:antialias=true
 URxvt.depth: 32
+URxvt.transparent: true
 URxvt.borderless: 1
 URxvt.scrollBar: false
 URxvt.loginShell: true
-UrxvtURxvt.secondaryScroll:  true    # Enable Shift-PageUp/Down in screen
+URxvt.secondaryScroll:  true    # Enable Shift-PageUp/Down in screen
 URxvt.saveLines: 5000
 URxvt.termName: rxvt-unicode
 URxvt.perl-ext-common: default,matcher
