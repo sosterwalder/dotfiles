@@ -4,7 +4,6 @@ URxvt.cursorBlink: true
 URxvt.underlineColor: yellow
 URxvt.font:  xft:inconsolata:size=12:antialias=true
 URxvt.depth: 32
-URxvt.transparent: true
 URxvt.borderless: 1
 URxvt.scrollBar: false
 URxvt.loginShell: true
@@ -53,7 +52,7 @@ URxvt.matcher.button: 1
 #define S_cyan          #2aa198
 #define S_green         #859900
 
-URxvt.background:            S_base03
+URxvt.background:            rgba:0000/4300/5400/dddd
 URxvt.foreground:            S_base00
 URxvt.cursorColor:           S_base1
 URxvt.pointerColorBackground:S_base01

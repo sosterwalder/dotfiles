@@ -332,8 +332,34 @@ alias -g sfind='sudo find'
 #vimpm ()      { vim `perldoc -l $1 | sed -e 's/pod$/pm/'` }
 #vimhelp ()    { vim -c "help $1" -c on -c "au! VimEnter *" }
 
+# PATH
 export PATH=$PATH:$HOME/bin
 export PATH="/usr/lib/colorgcc/bin:$PATH"
+export PATH=$PATH:$HOME/.rmux-sosterwalder/bin
+
+# SSH agent
+SSH_ENV="$HOME/.ssh/environment"
+
+function start_agent {
+     echo "Initialising new SSH agent..."
+     /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+     echo succeeded
+     chmod 600 "${SSH_ENV}"
+     . "${SSH_ENV}" > /dev/null
+     /usr/bin/ssh-add;
+}
+
+# Source SSH settings, if applicable
+
+if [ -f "${SSH_ENV}" ]; then
+     . "${SSH_ENV}" > /dev/null
+     #ps ${SSH_AGENT_PID} doesn't work under cywgin
+     ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+         start_agent;
+     }
+else
+     start_agent;
+fi
 
 # Stuff for P2P-MPI
 export P2PMPI_HOME=/opt/p2pmpi
@@ -347,5 +373,11 @@ export GEM_HOME=$HOME/.gem/ruby/2.1.0/gems
 export GEM_PATH=$GEM_HOME:/lib/ruby/gems/2.1.0 
 export GEM_CACHE=$GEM_HOME/cache
 export PATH=$PATH:$GEM_HOME/bin
+
+# FASD
+eval "$(fasd --init auto)"
+
+# TMUX
+source $HOME/.rmux-sosterwalder/rmuxid
 
 ## END OF FILE #################################################################

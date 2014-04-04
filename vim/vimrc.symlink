@@ -19,11 +19,14 @@ Bundle 'Lokaltog/vim-easymotion'
 Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 Bundle 'tpope/vim-rails.git'
 Bundle 'Lokaltog/vim-powerline'
+"Bundle 'hallettj/jslint.vim'
+"Bundle 'scrooloose/syntastic.git'
+Bundle 'Shutnik/jshint2.vim'
 
 " vim-scripts repos
 Bundle 'L9'
 Bundle 'FuzzyFinder'
-Bundle 'EasyGrep' 
+Bundle 'EasyGrep'
 
 " non github repos
 Bundle 'git://git.wincent.com/command-t.git'
@@ -48,6 +51,10 @@ set autoindent
 set smartindent
 syntax on
 
+" Highlight whitespaces and tabs
+set list
+set listchars=tab:▸.,trail:·,extends:#,nbsp:.
+
 " Pythonmode settings
 let g:pymode_lint_checker             = "pylint,pyflakes,pep8"
 let g:pymode_lint_ignore              = "E203,E272,E221,E251,E202,E271,C0302,W0511,F0401"
@@ -58,13 +65,15 @@ set guioptions-=m   " Remove menu bar
 set guioptions-=T   " Remove toolbar
 set guioptions-=r   " Remove right-hand scroll bar
 set guioptions-=l   " Remove left-hand scroll bar
-                                        
+set guioptions+=LlRrb
+set guioptions-=LlRrb
+
 " Easygrep
 let g:EasyGrepCommand=1
 
 " Latex
-set grepprg=grp\ -nH\ $*
-let g:tex_flavor = "latex"
+"set grepprg=grp\ -nH\ $*
+"let g:tex_flavor = "latex"
 
 " Set working directory to the current file
 " (http://vim.wikia.com/wiki/Set_working_directory_to_the_current_file)

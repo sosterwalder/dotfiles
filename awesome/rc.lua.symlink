@@ -612,6 +612,9 @@ globalkeys = awful.util.table.join(
 	-- Menubar
 	awful.key({ modkey }, "p", function() menubar.show() end),
 
+    -- Lock
+    awful.key({ modkey, "Control", "Shift" }, "l", function() awful.util.spawn("xlock") end),
+
 	-- Multimedia keys
 	awful.key({ }, "XF86AudioPlay", 
 		function ()
@@ -912,7 +915,7 @@ client.add_signal("unfocus", function(c) c.border_color = beautiful.border_norma
 -- Run these apps once - also called autostart
 run_once("/usr/bin/easystroke")
 --run_once("/usr/bin/fehlstart")
-run_once("/usr/bin/xscreensaver -nosplash")
+--run_once("/usr/bin/gnome-screensaver")
 run_once("/usr/bin/nm-applet")
 --run_once("/usr/bin/pnmixer")
 --run_once("~/.screenlayout/default.sh")

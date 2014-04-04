@@ -1,3 +1,7 @@
+set-option -g default-command "bash --rcfile '$RMUXDIR/init' -i"
+set -g default-terminal "screen-256color"
+set-option -g default-shell $SHELL
+
 #urxvt tab like window switching (-n: no prior escape seq)
 bind -n S-down new-window
 bind -n S-left prev
@@ -7,7 +11,7 @@ bind -n C-right swap-window -t +1
 
 
 #Set default path
-set -g default-path "$HOME"
+#set -g default-path "$HOME"
 
 set-option -g prefix C-b
 bind r source-file ~/.tmux.conf \; display-message "Config reloaded..."
@@ -38,4 +42,3 @@ set -g visual-activity on
 setw -g mode-keys vi
 bind-key -t vi-copy 'v' begin-selection
 bind-key -t vi-copy 'y' copy-selection
-

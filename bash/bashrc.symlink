@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+
+# PATH
+export PATH=$PATH:$HOME/bin
+export PATH="/usr/lib/colorgcc/bin:$PATH"
+
+# SSH agent
+SSH_ENV="$HOME/.ssh/environment"
+
+function start_agent {
+     echo "Initialising new SSH agent..."
+     /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+     echo succeeded
+     chmod 600 "${SSH_ENV}"
+     . "${SSH_ENV}" > /dev/null
+     /usr/bin/ssh-add;
+}
+
+# Source SSH settings, if applicable
+
+if [ -f "${SSH_ENV}" ]; then
+     . "${SSH_ENV}" > /dev/null
+     #ps ${SSH_AGENT_PID} doesn't work under cywgin
+     ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+         start_agent;
+     }
+else
+     start_agent;
+fi
+
+# Stuff for P2P-MPI
+export P2PMPI_HOME=/opt/p2pmpi
+export PATH=$PATH:$P2PMPI_HOME/bin
+
+# Powerline
+#. /home/sosterwalder/.local/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh
+
+# Ruby Gems
+export GEM_HOME=$HOME/.gem/ruby/2.1.0/gems
+export GEM_PATH=$GEM_HOME:/lib/ruby/gems/2.1.0 
+export GEM_CACHE=$GEM_HOME/cache
+export PATH=$PATH:$GEM_HOME/bin
+
+# FASD
+eval "$(fasd --init auto)"
+
+# RMUX
+source $HOME/.rmux-sosterwalder/rmuxid
+
+# Start TMUX
+if test -z $TMUX && [[ $TERM != "screen" ]]; then
+    exec tmux
+fi
+
+# 6000 unique bash history lines that are shared between 
+# sessions on every command. Happy ctrl-r!!
+# begin
+BASH_HIST="$RMUXDIR/bash_history"
+if [ ! -f "$BASH_HIST" ]; then
+	echo init >> "$BASH_HIST"
+	chmod 600 "$BASH_HIST"
+fi
+MY_HIST="$RMUXDIR/my_history"
+if [ ! -f "$MY_HIST" ]; then
+	echo init >> "$MY_HIST";
+	chmod 600 "$MY_HIST"
+fi
+shopt -s histappend
+export HISTFILE="$RMUXDIR/bash_history"
+# Limiting to 6000 does not happen here. You are allowed to have 4000 lines more
+# "linear" history than unique history. As soon as you add a non unique line,
+# "linear" history will collapse to unique history.
+export HISTSIZE=10000
+export HISTFILESIZE=10000
+if [ "$PROMPT_COMMAND" == "" ]; then
+	export PROMPT_COMMAND="history -a; $RMUXDIR/unique_history.py; history -r"
+else
+	export PROMPT_COMMAND="history -a; $RMUXDIR/unique_history.py; history -r; $PROMPT_COMMAND"
+fi
+# end
+
+gprfx=""
+if [ -e /opt/csw/bin/gls ]; then
+	gprfx="g"
+fi
+if [ -e /usr/bin/gls ]; then
+	gprfx="g"
+fi
+
+__git_ps1 ()
+{
+	local b="$(git symbolic-ref HEAD 2>/dev/null)";
+	if [ -n "$b" ]; then
+		if [ -n "$s" ]; then
+			s=",$s"
+		fi
+		printf " (%s)" "${b##refs/heads/}";# "$s";
+	fi
+}
+git config --global color.ui true 2> /dev/null
+alias git='HOME=$RMUXDIR git'
+
+export -f __git_ps1
+export PATH="$PATH:$RMUXDIR/bin"
+
+export PS1="\[\033[00;32m\]\u\[\033[00;37m\]@\h \[\033[00;34m\]\w [\$(ls -1 | wc -l | sed 's: ::g') files, \$(${gprfx}ls -lah | ${gprfx}grep -m 1 total | ${gprfx}sed 's/total //')] \$(__git_ps1  )\n\[\033[00;33m\]$> \[\033[00m\]"
+
+# Aliases
+alias ll="ls -lh"
+alias la="ls -lah"
+
+# Powerline
+# if [ -f ~/.local/lib/python2.7/site-packages/powerline/bindings/bash/powerline.sh ]; then
+#     #source ~/.local/lib/python2.7/site-packages/powerline/bindings/bash/powerline.sh
+# fi

@@ -26,6 +26,8 @@ xset fp rehash
 # Set screen layout
 sh ~/.screenlayout/default.sh &
 
+eval $(gpg-agent --daemon) &
+
 # exec gnome-session
 # exec startkde
 # exec startxfce4
@@ -33,3 +35,5 @@ sh ~/.screenlayout/default.sh &
 exec dbus-launch awesome
 #sxhkd &
 #exec bspwm
+
+ssh-agent -k
