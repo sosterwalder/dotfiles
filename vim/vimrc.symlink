@@ -19,13 +19,15 @@ Bundle 'Lokaltog/vim-easymotion'
 Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 Bundle 'tpope/vim-rails.git'
 Bundle 'Lokaltog/vim-powerline'
-"Bundle 'hallettj/jslint.vim'
-"Bundle 'scrooloose/syntastic.git'
+Bundle 'scrooloose/syntastic.git'
 Bundle 'Shutnik/jshint2.vim'
+Bundle 'xuhdev/SingleCompile'
+Bundle 'kien/ctrlp.vim.git'
+Bundle 'ervandew/snipmate.vim'
+Bundle 'ervandew/supertab'
 
 " vim-scripts repos
 Bundle 'L9'
-Bundle 'FuzzyFinder'
 Bundle 'EasyGrep'
 
 " non github repos
@@ -33,9 +35,12 @@ Bundle 'git://git.wincent.com/command-t.git'
 Bundle 'scrooloose/nerdtree'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'davidhalter/jedi-vim'
-Bundle 'klen/python-mode'
+"Bundle 'klen/python-mode'
 
 filetype plugin indent on     " required!
+
+" ctrlp
+set runtimepath^=~/.vim/bundle/ctrlp.vim
 
 set laststatus=2
 set encoding=utf-8
@@ -55,10 +60,15 @@ syntax on
 set list
 set listchars=tab:▸.,trail:·,extends:#,nbsp:.
 
+" Syntastic settings
+" Set to C++11
+let g:syntastic_cpp_compiler = 'clang++'
+let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
+
 " Pythonmode settings
-let g:pymode_lint_checker             = "pylint,pyflakes,pep8"
-let g:pymode_lint_ignore              = "E203,E272,E221,E251,E202,E271,C0302,W0511,F0401"
-let g:pymode_folding = 0
+" let g:pymode_lint_checker             = "pylint,pyflakes,pep8"
+" let g:pymode_lint_ignore              = "E203,E272,E221,E251,E202,E271,C0302,W0511,F0401"
+" let g:pymode_folding = 0
 
 " GVIM
 set guioptions-=m   " Remove menu bar
@@ -67,13 +77,14 @@ set guioptions-=r   " Remove right-hand scroll bar
 set guioptions-=l   " Remove left-hand scroll bar
 set guioptions+=LlRrb
 set guioptions-=LlRrb
+set guifont=Inconsolata\ 14
 
 " Easygrep
 let g:EasyGrepCommand=1
 
 " Latex
 "set grepprg=grp\ -nH\ $*
-"let g:tex_flavor = "latex"
+let g:tex_flavor = "latex"
 
 " Set working directory to the current file
 " (http://vim.wikia.com/wiki/Set_working_directory_to_the_current_file)
@@ -91,3 +102,7 @@ nnoremap <silent> <A-Right> :execute 'silent! tabmove ' . tabpagenr()<CR>
 " Automagically execute octave and matlab files when pressing F5
 autocmd FileType octave map <buffer> <F5> ggOpkg load all<esc>Gopause<esc>:w<cr>:!octave -qf %<cr>ddggdd:w<cr>
 autocmd FileType matlab map <buffer> <F5> ggOpkg load all<esc>Gopause<esc>:w<cr>:!octave -qf %<cr>ddggdd:w<cr>
+
+" Mappings for SingleCompile
+nmap <F9> :SCCompile<cr>
+nmap <F10> :SCCompileRun<cr>

@@ -1,4 +1,3 @@
-set-option -g default-command "bash --rcfile '$RMUXDIR/init' -i"
 set -g default-terminal "screen-256color"
 set-option -g default-shell $SHELL
 

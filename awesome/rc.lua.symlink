@@ -811,6 +811,11 @@ awful.rules.rules = {
 	{ rule = { class = "Eclipse" },
 	  properties = { tag = tags[1][8], floating = false } },
 
+	{ rule = { class = "plugin-container"},
+	  properties = {floating = true } },
+
+	{ rule = { class = "Exe"},
+	  properties = {floating = true } },
 }
 
 local screen_to_add = 1
@@ -920,8 +925,9 @@ run_once("/usr/bin/nm-applet")
 --run_once("/usr/bin/pnmixer")
 --run_once("~/.screenlayout/default.sh")
 run_once("clipit")
-run_once("batti")
+--run_once("batti")
 run_once("xfce4-power-manager")
 run_once("/usr/bin/compton --config /home/sosterwalder/.config/compton.conf -bcCGf -D1")
 run_once("setxkbmap -model pc105 -layout us -variant intl")
+run_once("fluxgui")
 -- }}}
