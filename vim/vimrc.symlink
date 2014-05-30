@@ -19,9 +19,17 @@ Bundle 'Lokaltog/vim-easymotion'
 Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 Bundle 'tpope/vim-rails.git'
 Bundle 'Lokaltog/vim-powerline'
-"Bundle 'hallettj/jslint.vim'
-"Bundle 'scrooloose/syntastic.git'
+Bundle 'scrooloose/syntastic.git'
 Bundle 'Shutnik/jshint2.vim'
+Bundle "MarcWeber/vim-addon-mw-utils"
+Bundle "tomtom/tlib_vim"
+Bundle "garbas/vim-snipmate"
+Bundle "honza/vim-snippets"
+Bundle "Shougo/vimproc.vim"
+Bundle "Shougo/unite.vim"
+Bundle "m2mdas/phpcomplete-extended"
+Bundle "ervandew/supertab"
+Bundle "kien/ctrlp.vim"
 
 " vim-scripts repos
 Bundle 'L9'
@@ -31,17 +39,23 @@ Bundle 'EasyGrep'
 " non github repos
 Bundle 'git://git.wincent.com/command-t.git'
 Bundle 'scrooloose/nerdtree'
-Bundle 'altercation/vim-colors-solarized'
+"Bundle 'altercation/vim-colors-solarized'
 Bundle 'davidhalter/jedi-vim'
-Bundle 'klen/python-mode'
+"Bundle 'klen/python-mode'
 
 filetype plugin indent on     " required!
 
 set laststatus=2
 set encoding=utf-8
 
-set background=dark
-colorscheme solarized
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+
+" Search-specific
+" ignore case
+set ignorecase
+set smartcase
+" Hightlight matches
+set hlsearch
 
 set tabstop=4
 set softtabstop=4
@@ -55,10 +69,16 @@ syntax on
 set list
 set listchars=tab:▸.,trail:·,extends:#,nbsp:.
 
+" Theme settings
+"set background=dark
+"colorscheme solarized
+"let g:molokai_original = 1
+colorscheme mustang
+
 " Pythonmode settings
-let g:pymode_lint_checker             = "pylint,pyflakes,pep8"
-let g:pymode_lint_ignore              = "E203,E272,E221,E251,E202,E271,C0302,W0511,F0401"
-let g:pymode_folding = 0
+"let g:pymode_lint_checker             = "pylint,pyflakes,pep8"
+"let g:pymode_lint_ignore              = "E203,E272,E221,E251,E202,E271,C0302,W0511,F0401"
+"let g:pymode_folding = 0
 
 " GVIM
 set guioptions-=m   " Remove menu bar
@@ -71,9 +91,18 @@ set guioptions-=LlRrb
 " Easygrep
 let g:EasyGrepCommand=1
 
+" Supertab
+" http://joncairns.com/2012/05/using-vim-as-a-php-ide/
+let g:SuperTabDefaultCompletionType = ""
+
 " Latex
 "set grepprg=grp\ -nH\ $*
 "let g:tex_flavor = "latex"
+
+" Syntastic
+let g:syntastic_javascript_checkers = ['jslint']
+let g:syntastic_python_checkers = ['pylama']
+let g:syntastic_python_pylama_args='--ignore=E272,E221'
 
 " Set working directory to the current file
 " (http://vim.wikia.com/wiki/Set_working_directory_to_the_current_file)

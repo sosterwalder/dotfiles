@@ -366,7 +366,7 @@ memicon = wibox.widget.imagebox(beautiful.widget_mem)
 -- Initialize widget
 memwidget = lain.widgets.mem({
 	settings  = function()
-		widget:set_text(" " .. mem_now.used .. " MB ")
+		widget:set_text(" " .. mem_now.used .. "/" .. mem_now.total .. " MB - " .. mem_now.swapused .. " MB")
 	end
 })
 memwidgetbg = wibox.widget.background(memwidget, "#313131")
@@ -792,7 +792,7 @@ awful.rules.rules = {
 	{ rule = { class = "gimp" },
 	  properties = { floating = true } },
 	
-	-- Set Firefox to always map on tags number 2 of screen 1.
+	-- Set Firefox to always map on tags number 2 of current screen.
 	 { rule = { class = "Firefox" },
 	   properties = { tag = tags[1][2], floating = false } },
 	
@@ -920,8 +920,9 @@ run_once("/usr/bin/nm-applet")
 --run_once("/usr/bin/pnmixer")
 --run_once("~/.screenlayout/default.sh")
 run_once("clipit")
-run_once("batti")
+--run_once("batti")
 run_once("xfce4-power-manager")
+run_once("xfce4-volumed-pulse")
 run_once("/usr/bin/compton --config /home/sosterwalder/.config/compton.conf -bcCGf -D1")
 run_once("setxkbmap -model pc105 -layout us -variant intl")
 -- }}}
