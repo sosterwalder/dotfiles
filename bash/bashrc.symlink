@@ -42,7 +42,9 @@ export GEM_CACHE=$GEM_HOME/cache
 export PATH=$PATH:$GEM_HOME/bin
 
 # FASD
-eval "$(fasd --init auto)"
+if [ -f /usr/bin/fasd ]; then
+	eval "$(fasd --init auto)"
+fi
 
 # RMUX
 source $HOME/.rmux-sosterwalder/rmuxid
@@ -104,6 +106,21 @@ export PS1="\[\033[00;32m\]\u\[\033[00;37m\]@\h \[\033[00;34m\]\w [\$(ls -1 | wc
 alias ll="ls -lh"
 alias la="ls -lah"
 
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
+        . /usr/share/bash-completion/bash_completion
+    elif [ -f /etc/bash_completion ]; then
+        . /etc/bash_completion
+    fi
+fi
+
+# Start TMUX
+#if test -z $TMUX && [[ $TERM != "screen" ]]; then
+#    exec tmux
+#fi
 # Powerline
 # if [ -f ~/.local/lib/python2.7/site-packages/powerline/bindings/bash/powerline.sh ]; then
 #     #source ~/.local/lib/python2.7/site-packages/powerline/bindings/bash/powerline.sh
