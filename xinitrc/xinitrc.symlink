@@ -33,7 +33,7 @@ eval $(gpg-agent --daemon) &
 # exec startxfce4
 # ...or the Window Manager of your choice
 exec dbus-launch awesome
-#sxhkd &
-#exec bspwm
+#exec dbus-launch bspwm
+#exec dbus-launch herbstluftwm --locked
 
 ssh-agent -k

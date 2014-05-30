@@ -45,10 +45,11 @@ Bundle 'davidhalter/jedi-vim'
 
 filetype plugin indent on     " required!
 
+" ctrlp
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+
 set laststatus=2
 set encoding=utf-8
-
-set runtimepath^=~/.vim/bundle/ctrlp.vim
 
 " Search-specific
 " ignore case
@@ -75,6 +76,11 @@ set listchars=tab:▸.,trail:·,extends:#,nbsp:.
 "let g:molokai_original = 1
 colorscheme mustang
 
+" Syntastic settings
+" Set to C++11
+let g:syntastic_cpp_compiler = 'clang++'
+let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
+
 " Pythonmode settings
 "let g:pymode_lint_checker             = "pylint,pyflakes,pep8"
 "let g:pymode_lint_ignore              = "E203,E272,E221,E251,E202,E271,C0302,W0511,F0401"
@@ -87,6 +93,7 @@ set guioptions-=r   " Remove right-hand scroll bar
 set guioptions-=l   " Remove left-hand scroll bar
 set guioptions+=LlRrb
 set guioptions-=LlRrb
+set guifont=Inconsolata\ 14
 
 " Easygrep
 let g:EasyGrepCommand=1
@@ -120,3 +127,7 @@ nnoremap <silent> <A-Right> :execute 'silent! tabmove ' . tabpagenr()<CR>
 " Automagically execute octave and matlab files when pressing F5
 autocmd FileType octave map <buffer> <F5> ggOpkg load all<esc>Gopause<esc>:w<cr>:!octave -qf %<cr>ddggdd:w<cr>
 autocmd FileType matlab map <buffer> <F5> ggOpkg load all<esc>Gopause<esc>:w<cr>:!octave -qf %<cr>ddggdd:w<cr>
+
+" Mappings for SingleCompile
+nmap <F9> :SCCompile<cr>
+nmap <F10> :SCCompileRun<cr>
