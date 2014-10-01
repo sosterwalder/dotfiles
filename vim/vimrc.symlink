@@ -110,6 +110,7 @@ let g:SuperTabDefaultCompletionType = ""
 let g:syntastic_javascript_checkers = ['jslint']
 let g:syntastic_python_checkers = ['pylama']
 let g:syntastic_python_pylama_args='--ignore=E272,E221'
+let g:syntastic_haml_checkers = ['haml_lint']
 
 " Set working directory to the current file
 " (http://vim.wikia.com/wiki/Set_working_directory_to_the_current_file)

@@ -24,7 +24,7 @@ xset fp rehash
 # Set Synaptics options
 
 # Set screen layout
-sh ~/.screenlayout/default.sh &
+# sh ~/.screenlayout/default.sh &
 
 eval $(gpg-agent --daemon) &
 

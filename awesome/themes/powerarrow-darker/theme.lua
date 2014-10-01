@@ -12,6 +12,8 @@ theme.wallpaper                     = themes_dir .. "/wall.png"
 
 theme.useless_gap_width             = 10
 
+theme.wibox_bg_normal               = "#000060"
+
 theme.font                          = "Terminus 9"
 theme.fg_normal                     = "#DDDDFF"
 theme.fg_focus                      = "#F0DFAF"

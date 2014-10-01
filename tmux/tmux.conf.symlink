@@ -1,6 +1,7 @@
-set-option -g default-command "bash --rcfile '$HOME/.bashrc' -i"
+#set-option -g default-command "bash --rcfile '$HOME/.bashrc' -i"
+#set-option -g default-shell $SHELL
 set -g default-terminal "screen-256color"
-set-option -g default-shell $SHELL
+set-option -g default-shell /bin/fish
 
 #urxvt tab like window switching (-n: no prior escape seq)
 bind -n S-down new-window
@@ -12,7 +13,7 @@ bind -n C-right swap-window -t +1
 #Set default path
 #set -g default-path "$HOME"
 
-set-option -g prefix C-b
+set-option -g prefix C-a
 bind r source-file ~/.tmux.conf \; display-message "Config reloaded..."
 bind-key C-a last-window
 unbind % # Remove default binding since we're replacing
@@ -32,9 +33,9 @@ set -g status-right-length 40
 # Highlight active window
 set-window-option -g window-status-current-bg red
 # Automatically set window title
-setw -g automatic-rename
+setw -g automatic-rename on
 
-setw -g monitor-activity off 
+setw -g monitor-activity on
 set -g visual-activity on
 
 # vi key bindings
