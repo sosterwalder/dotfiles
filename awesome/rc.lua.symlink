@@ -110,7 +110,8 @@ beautiful.init(configdir .. "/themes/powerarrow-darker/theme.lua")
 --terminal = 'urxvt -name Terminal -fn "xft:Monospace:pixelsize=12" -fade 20 +sb -depth 32 -bg rgba:0000/002b/0036/dddd'
 --terminal = 'urxvt -name Terminal -fn "xft:Monospace:pixelsize=12" -fade 20 +sb -depth 32'
 --terminal = 'lilyterm'
-terminal = 'urxvt'
+--terminal = 'urxvt'
+terminal = 'st'
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -201,7 +202,7 @@ tags = {
 	settings = {
 		{
 			--names   = { '1 ⎈⚫', '2 ✎⚫', '3 ☏⚫', '4 ⇵⚫', '5 ⎆⚫',  '6 ⛃⚫', '7 ♫⚫', '8 ✵‡', 9 },
-			names = { 1, 'www', 'mail', 'im', 'office/reading', 6, 7, '✎', 9 }, 
+			names = { 1, 2, '✉', 'im', 'office/reading', 6, '♫', '✎', 9 }, 
 			layout	= {
 				layouts[13],	-- 1
 				layouts[10],	-- 2
@@ -245,9 +246,10 @@ browsers_menu = {
 --}}}
 --{{{ Utils Menu
 utils_menu = {
+    { "ORACLE!! SQLDeveloper", "/opt/sqldeveloper/sqldeveloper/bin/sqldeveloper" }
 }
 --}}}
---{{{ Utils Menu
+--{{{ Screens Menu
 screens_menu = {
 	{ "Default", "/home/sosterwalder/.screenlayout/default.sh" },
 	{ "T410s", "/home/sosterwalder/.screenlayout/layout_thinkpad_t410s.sh" },
@@ -407,27 +409,6 @@ mpdwidget = lain.widgets.mpd({
 })
 mpdwidgetbg = wibox.widget.background(mpdwidget, "#313131")
 
--- ALSA volume
-volicon = wibox.widget.imagebox(beautiful.widget_vol)
-voliconbg = wibox.widget.background(volicon, "#313131")
-volumewidget = lain.widgets.alsa({
-	settings = function()
-		if volume_now.status == "off" then
-			volicon:set_image(beautiful.widget_vol_mute)
-		elseif tonumber(volume_now.level) == 0 then
-			volicon:set_image(beautiful.widget_vol_no)
-		elseif tonumber(volume_now.level) <= 50 then
-			volicon:set_image(beautiful.widget_vol_low)
-		else
-			volicon:set_image(beautiful.widget_vol)
-		end
-
-		widget:set_text(" " .. volume_now.level .. "% ")
-
-	end
-})
-volumewidgetbg = wibox.widget.background(volumewidget, "#313131")
-
 -- Net
 neticon = wibox.widget.imagebox(beautiful.widget_net)
 neticonup = wibox.widget.imagebox(beautiful.widget_net_up)
@@ -540,9 +521,6 @@ for s = 1, screen.count() do
 	right_layout:add(netwidget)
 	right_layout:add(arrl_dl)
 	right_layout:add(kbdwidget)
-	right_layout:add(arrl_ld)
-	right_layout:add(voliconbg)
-	right_layout:add(volumewidgetbg)
 	right_layout:add(arrl_dl)
 	right_layout:add(wibox.widget.systray())
 	right_layout:add(spr)
@@ -564,16 +542,30 @@ for s = 1, screen.count() do
     right_secondary_layout:add(fsicon)
     right_secondary_layout:add(fs_root)
     right_secondary_layout:add(fs_home)
+    right_secondary_layout:add(mylayoutbox[s])
 
 	-- Now bring it all together (with the tasklist in the middle)
 	local layout = wibox.layout.align.horizontal()
 	layout:set_left(left_layout)
 	layout:set_middle(mytasklist[s])
-    if s == 1 then
-    	layout:set_right(right_layout)
-    else
-    	layout:set_right(right_secondary_layout)
-    end
+	
+	if screen.count() > 1 then
+		if s == 1 then
+			layout:set_right(right_layout)
+		else
+			layout:set_right(right_secondary_layout)
+		end
+	else
+		right_layout:add(cpuicon)
+		right_layout:add(cpuwidget)
+		for i=1,4 do
+			right_layout:add(cores_graphs[i])
+		end
+		right_layout:add(memicon)
+		right_layout:add(memgraph)
+		right_layout:add(memusage)
+		layout:set_right(right_layout)
+	end
 
 	mywibox[s]:set_widget(layout)
 end
@@ -681,19 +673,16 @@ globalkeys = awful.util.table.join(
 	awful.key({ }, "XF86AudioRaiseVolume", 
 		function () 
 			awful.util.spawn("amixer -c 0 set Master 1dB+") 
-			volumewidget.update() 
 		end
 	),
 	awful.key({ }, "XF86AudioLowerVolume", 
 		function () 
 			awful.util.spawn("amixer -c 0 set Master 1dB-") 
-			volumewidget.update() 
 		end
 	),
 	awful.key({ }, "XF86AudioMute", 
 		function () 
 			awful.util.spawn("amixer -q set Master playback toggle") 
-			volumewidget.update() 
 		end
 	),
 
@@ -701,34 +690,18 @@ globalkeys = awful.util.table.join(
 	awful.key({ altkey }, "Up",
 		function ()
 			awful.util.spawn("amixer -q set Master 1%+")
-			naughty.notify({ preset = naughty.config.presets.info,
-							 title = "Changed volume level",
-							 text = "Level: " .. volume_now.level .. "%" })
-			volumewidget.update()
 		end),
 	awful.key({ altkey }, "Down",
 		function ()
 			awful.util.spawn("amixer -q set Master 1%-")
-			naughty.notify({ preset = naughty.config.presets.info,
-							 title = "Changed volume level",
-							 text = "Level: " .. volume_now.level .. "%" })
-			volumewidget.update()
 		end),
 	awful.key({ altkey }, "m",
 		function ()
 			awful.util.spawn("amixer -q set Master playback toggle")
-			naughty.notify({ preset = naughty.config.presets.info,
-							 title = "Changed volume level",
-							 text = "Level: " .. volume_now.level .. "%" })
-			volumewidget.update()
 		end),
 	awful.key({ altkey, "Control" }, "m",
 		function ()
 			awful.util.spawn("amixer -q set Master playback 100%")
-			naughty.notify({ preset = naughty.config.presets.info,
-							 title = "Changed volume level",
-							 text = "Level: " .. volume_now.level .. "%" })
-			volumewidget.update()
 		end),
 
 	-- MPD control
@@ -977,8 +950,8 @@ run_once("/usr/bin/nm-applet")
 run_once("~/.screenlayout/default.sh")
 run_once("clipit")
 --run_once("batti")
-run_once("xfce4-power-manager")
-run_once("xfce4-volumed-pulse")
+--run_once("xfce4-power-manager")
+--run_once("xfce4-volumed-pulse")
 run_once("/usr/bin/compton --config /home/so/.config/compton.conf -bcCGf -D1")
 run_once("setxkbmap -model pc105 -layout us -variant intl")
 run_once("fluxgui")
