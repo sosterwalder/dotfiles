@@ -1,7 +1,7 @@
-#set-option -g default-command "bash --rcfile '$HOME/.bashrc' -i"
-#set-option -g default-shell $SHELL
-set -g default-terminal "screen-256color"
-set-option -g default-shell /bin/fish
+set-option -g default-command "bash --rcfile '$HOME/.bashrc' -i"
+set-option -g default-shell $SHELL
+set -g default-terminal "xterm-256color"
+set-option -g default-shell /usr/bin/bash
 
 #urxvt tab like window switching (-n: no prior escape seq)
 bind -n S-down new-window
@@ -9,13 +9,18 @@ bind -n S-left prev
 bind -n S-right next
 bind -n C-left swap-window -t -1
 bind -n C-right swap-window -t +1
+# hjkl pane traversal
+bind -n C-h select-pane -L
+bind -n C-j select-pane -D
+bind -n C-k select-pane -U
+bind -n C-l select-pane -R
 
 #Set default path
 #set -g default-path "$HOME"
 
 set-option -g prefix C-a
 bind r source-file ~/.tmux.conf \; display-message "Config reloaded..."
-bind-key C-a last-window
+# bind-key C-a last-window
 unbind % # Remove default binding since we're replacing
 bind | split-window -h
 bind _ split-window -v

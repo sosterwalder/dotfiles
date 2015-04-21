@@ -14,6 +14,12 @@ fi
 # Load Xresources
 [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
 
+# Disable touchpad
+xinput --set-prop "SynPS/2 Synaptics TouchPad" "Device Enabled" 0
+
+# Key repeat rate
+xset r rate 200 25
+
 # Autostart
 # Not here.. find it in ~/.config/awesome/rc.lua
 
@@ -21,19 +27,10 @@ fi
 xset +fp /usr/share/fonts/local
 xset fp rehash
 
-# Set Synaptics options
-
-# Set screen layout
-# sh ~/.screenlayout/default.sh &
-
 eval $(gpg-agent --daemon) &
+# ssh-agent -k
 
-# exec gnome-session
-# exec startkde
-# exec startxfce4
-# ...or the Window Manager of your choice
-exec dbus-launch awesome
+exec ssh-agent dbus-launch awesome
 #exec dbus-launch bspwm
 #exec dbus-launch herbstluftwm --locked
 
-ssh-agent -k

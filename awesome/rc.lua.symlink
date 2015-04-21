@@ -110,8 +110,8 @@ beautiful.init(configdir .. "/themes/powerarrow-darker/theme.lua")
 --terminal = 'urxvt -name Terminal -fn "xft:Monospace:pixelsize=12" -fade 20 +sb -depth 32 -bg rgba:0000/002b/0036/dddd'
 --terminal = 'urxvt -name Terminal -fn "xft:Monospace:pixelsize=12" -fade 20 +sb -depth 32'
 --terminal = 'lilyterm'
---terminal = 'urxvt'
-terminal = 'st'
+terminal = 'termite'
+terminal2 = 'st'
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -120,9 +120,9 @@ editor_cmd = terminal .. " -e " .. editor
 -- shutdowncmd = "gksudo 'shutdown -hP now'"
 -- restartcmd	= "gksudo 'reboot'"
 
-suspendcmd =  "pm-suspend"
-shutdowncmd = "shutdown -hP now"
-restartcmd	= "reboot"
+suspendcmd  = "systemctl hibernate"
+shutdowncmd = "systemctl poweroff"
+restartcmd  = "systemctl reboot"
 --}}}
 
 -- Default modkey.
@@ -136,7 +136,8 @@ modkey = "Mod4"
 altkey	   = "Mod1"
 iptraf	   = terminal .. " --geometry=180x54-20+34 -e sudo iptraf-ng -i all "
 --musicplr	 = terminal .. " --geometry=130x34-320+16 -e ncmpcpp "
-musicplr = "clementine"
+musicplr   = "clementine"
+hamstercmd = "hamster current"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 local layouts =
@@ -204,15 +205,15 @@ tags = {
 			--names   = { '1 ⎈⚫', '2 ✎⚫', '3 ☏⚫', '4 ⇵⚫', '5 ⎆⚫',  '6 ⛃⚫', '7 ♫⚫', '8 ✵‡', 9 },
 			names = { 1, 2, '✉', 'im', 'office/reading', 6, '♫', '✎', 9 }, 
 			layout	= {
-				layouts[13],	-- 1
-				layouts[10],	-- 2
-				layouts[1],		-- 3
-				layouts[1],		-- 4
-				layouts[2],		-- 5
-				layouts[1],		-- 6
-				layouts[10],	-- 7
-				layouts[10],	-- 8
-				layouts[1]		-- 9
+				layouts[2],	-- 1
+				layouts[2],	-- 2
+				layouts[2],	-- 3
+				layouts[2],	-- 4
+				layouts[2],	-- 5
+				layouts[2],	-- 6
+				layouts[2],	-- 7
+				layouts[2],	-- 8
+				layouts[2]	-- 9
 			}
 		}
 	}
@@ -293,7 +294,7 @@ markup = lain.util.markup
 red    = "#EA6F81"
 -- WIDGETS
 -- Create a textclock widget
-mytextclock = awful.widget.textclock()
+mytextclock = awful.widget.textclock(" %a %b %d, %H:%M:%S ", 1)
 local clock_widget = wibox.widget.background()
 clock_widget:set_widget(mytextclock)
 clock_widget:set_bg("#313131")
@@ -394,17 +395,20 @@ mpdwidget = lain.widgets.mpd({
 		if mpd_now.state == "play" then
 			artist = " " .. mpd_now.artist .. " "
 			title  = mpd_now.title	.. " "
+			album  = "(" .. mpd_now.album .. ")"
 			mpdicon:set_image(beautiful.widget_music_on)
 		elseif mpd_now.state == "pause" then
 			artist = " mpd "
 			title  = "paused "
+			album  = ""
 		else
 			artist = ""
 			title  = ""
+			album  = ""
 			mpdicon:set_image(beautiful.widget_music)
 		end
 
-		widget:set_markup(markup(red, artist) .. title)
+		widget:set_markup(markup(red, artist) .. title .. album)
 	end
 })
 mpdwidgetbg = wibox.widget.background(mpdwidget, "#313131")
@@ -422,6 +426,14 @@ netwidget = wibox.widget.background(lain.widgets.net({
 	end
 }), "#313131")
 
+-- Hamster
+hamster_widget = lain.widgets.base({
+	cmd = "hamster current",
+	settings = function()
+		widget:set_text(output)
+	end
+})
+
 -- Separators
 spr = wibox.widget.textbox(' ')
 arrl = wibox.widget.imagebox()
@@ -432,7 +444,38 @@ arrl_ld = wibox.widget.imagebox()
 arrl_ld:set_image(beautiful.arrl_ld)
 
 -- Create a wibox for each screen and add it
-mywibox = {}
+local screenlayouts = {
+	[1] = {
+		['top'] = {
+			['layout'] = {},
+			['center'] = {},
+			['left'] = {},
+			['right'] = {}
+		},
+		['bottom'] = {
+			['layout'] = {},
+			['center'] = {},
+			['left'] = {},
+			['right'] = {}
+		}
+	},
+	[2] = {
+		['top'] = {
+			['layout'] = {},
+			['center'] = {},
+			['left'] = {},
+			['right'] = {}
+		},
+		['bottom'] = {
+			['layout'] = {},
+			['center'] = {},
+			['left'] = {},
+			['right'] = {}
+		}
+	}
+}
+topwibox = {}
+bottomwibox = {}
 mypromptbox = {}
 mylayoutbox = {}
 mytaglist = {}
@@ -480,6 +523,24 @@ mytasklist.buttons = awful.util.table.join(
 											  if client.focus then client.focus:raise() end
 										  end))
 
+
+screenlayouts[1]['top']['layout'] = wibox.layout.align.horizontal()
+screenlayouts[1]['top']['center'] = wibox.layout.fixed.horizontal()
+screenlayouts[1]['top']['left'] = wibox.layout.fixed.horizontal()
+screenlayouts[1]['top']['right'] = wibox.layout.fixed.horizontal()
+screenlayouts[1]['bottom']['layout'] = wibox.layout.align.horizontal()
+screenlayouts[1]['bottom']['center'] = wibox.layout.fixed.horizontal()
+screenlayouts[1]['bottom']['left'] = wibox.layout.fixed.horizontal()
+screenlayouts[1]['bottom']['right'] = wibox.layout.fixed.horizontal()
+screenlayouts[2]['top']['layout'] = wibox.layout.align.horizontal()
+screenlayouts[2]['top']['center'] = wibox.layout.fixed.horizontal()
+screenlayouts[2]['top']['left'] = wibox.layout.fixed.horizontal()
+screenlayouts[2]['top']['right'] = wibox.layout.fixed.horizontal()
+screenlayouts[2]['bottom']['layout'] = wibox.layout.align.horizontal()
+screenlayouts[2]['bottom']['center'] = wibox.layout.fixed.horizontal()
+screenlayouts[2]['bottom']['left'] = wibox.layout.fixed.horizontal()
+screenlayouts[2]['bottom']['right'] = wibox.layout.fixed.horizontal()
+
 for s = 1, screen.count() do
 	-- Create a promptbox for each screen
 	mypromptbox[s] = awful.widget.prompt()
@@ -500,74 +561,89 @@ for s = 1, screen.count() do
 	mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
 
 	-- Create the wibox
-	mywibox[s] = awful.wibox({ position = "top", screen = s --[[, bg = beautiful.wibox_bg_normal --]] })
+	topwibox[s] = awful.wibox({ position = "top", screen = s --[[, bg = beautiful.wibox_bg_normal --]] })
+    -- Bottom wibox
+	bottomwibox[s] = awful.wibox({ position = "bottom", screen = s --[[, bg = beautiful.wibox_bg_normal --]] })
+end
 
-	-- Widgets that are aligned to the left
-	local left_layout = wibox.layout.fixed.horizontal()
-	left_layout:add(spr)
-	left_layout:add(mytaglist[s])
-	left_layout:add(mypromptbox[s])
-	left_layout:add(spr)
+local s = 1
 
-	-- Widgets that are aligned to the right
-	local right_layout = wibox.layout.fixed.horizontal()
-	right_layout:add(spr)
-	right_layout:add(arrl)
-	right_layout:add(arrl_ld)
-	right_layout:add(mpdicon)
-	right_layout:add(mpdwidget)
-	right_layout:add(arrl_ld)
-	right_layout:add(neticon)
-	right_layout:add(netwidget)
-	right_layout:add(arrl_dl)
-	right_layout:add(kbdwidget)
-	right_layout:add(arrl_dl)
-	right_layout:add(wibox.widget.systray())
-	right_layout:add(spr)
-	right_layout:add(arrl_ld)
-	right_layout:add(clock_widget)
-	right_layout:add(arrl_dl)
-	right_layout:add(mylayoutbox[s])
+-- Widgets that are aligned top left
+screenlayouts[1]['top']['left']:add(spr)
+screenlayouts[1]['top']['left']:add(mytaglist[s])
+screenlayouts[1]['top']['left']:add(mypromptbox[s])
+screenlayouts[1]['top']['left']:add(spr)
+-- Widgets that are aligned top left
+screenlayouts[1]['top']['right']:add(mylayoutbox[s])
+screenlayouts[1]['top']['right']:add(spr)
+screenlayouts[1]['top']['right']:add(arrl)
+screenlayouts[1]['top']['right']:add(arrl_ld)
+screenlayouts[1]['top']['right']:add(neticon)
+screenlayouts[1]['top']['right']:add(netwidget)
+screenlayouts[1]['top']['right']:add(arrl_dl)
+screenlayouts[1]['top']['right']:add(kbdwidget)
+screenlayouts[1]['top']['right']:add(arrl_dl)
+screenlayouts[1]['top']['right']:add(wibox.widget.systray())
+screenlayouts[1]['top']['right']:add(spr)
+screenlayouts[1]['top']['right']:add(arrl_ld)
+screenlayouts[1]['top']['right']:add(clock_widget)
+screenlayouts[1]['top']['right']:add(arrl_dl)
+screenlayouts[1]['top']['right']:add(mylayoutbox[s])
+-- Widgets that are aligned top middle
+screenlayouts[1]['top']['center']:add(mytasklist[s])
 
-    -- Right layout for secondary screen
-    local right_secondary_layout = wibox.layout.fixed.horizontal()
-    right_secondary_layout:add(cpuicon)
-    right_secondary_layout:add(cpuwidget)
-    for i=1,8 do
-        right_secondary_layout:add(cores_graphs[i])
-    end
-    right_secondary_layout:add(memicon)
-    right_secondary_layout:add(memgraph)
-    right_secondary_layout:add(memusage)
-    right_secondary_layout:add(fsicon)
-    right_secondary_layout:add(fs_root)
-    right_secondary_layout:add(fs_home)
-    right_secondary_layout:add(mylayoutbox[s])
+-- Widgets that are aligned bottom left
+screenlayouts[1]['bottom']['left']:add(spr)
+screenlayouts[1]['bottom']['left']:add(hamster_widget)
+screenlayouts[1]['bottom']['left']:add(arrl_ld)
+screenlayouts[1]['bottom']['left']:add(mpdicon)
+screenlayouts[1]['bottom']['left']:add(mpdwidget)
+-- Widgets that are aligned bottom right
+screenlayouts[1]['bottom']['right']:add(cpuicon)
+screenlayouts[1]['bottom']['right']:add(cpuwidget)
+for i=1,8 do
+	screenlayouts[1]['bottom']['right']:add(cores_graphs[i])
+end
+screenlayouts[1]['bottom']['right']:add(memicon)
+screenlayouts[1]['bottom']['right']:add(memgraph)
+screenlayouts[1]['bottom']['right']:add(memusage)
+screenlayouts[1]['bottom']['right']:add(fsicon)
+screenlayouts[1]['bottom']['right']:add(fs_root)
+screenlayouts[1]['bottom']['right']:add(fs_home)
 
-	-- Now bring it all together (with the tasklist in the middle)
-	local layout = wibox.layout.align.horizontal()
-	layout:set_left(left_layout)
-	layout:set_middle(mytasklist[s])
-	
-	if screen.count() > 1 then
-		if s == 1 then
-			layout:set_right(right_layout)
-		else
-			layout:set_right(right_secondary_layout)
-		end
-	else
-		right_layout:add(cpuicon)
-		right_layout:add(cpuwidget)
-		for i=1,4 do
-			right_layout:add(cores_graphs[i])
-		end
-		right_layout:add(memicon)
-		right_layout:add(memgraph)
-		right_layout:add(memusage)
-		layout:set_right(right_layout)
-	end
+-- now bring it all together
+screenlayouts[1]['top']['layout']:set_left(screenlayouts[1]['top']['left'])
+screenlayouts[1]['top']['layout']:set_middle(screenlayouts[1]['top']['center'])
+screenlayouts[1]['top']['layout']:set_right(screenlayouts[1]['top']['right'])
+screenlayouts[1]['bottom']['layout']:set_left(screenlayouts[1]['bottom']['left'])
+screenlayouts[1]['bottom']['layout']:set_middle(screenlayouts[1]['bottom']['center'])
+screenlayouts[1]['bottom']['layout']:set_right(screenlayouts[1]['bottom']['right'])
 
-	mywibox[s]:set_widget(layout)
+topwibox[s]:set_widget(screenlayouts[1]['top']['layout'])
+bottomwibox[s]:set_widget(screenlayouts[1]['bottom']['layout'])
+
+
+if screen.count() > 1 then
+	s = 2
+	-- Widgets that are aligned top left
+	screenlayouts[2]['top']['left']:add(spr)
+	screenlayouts[2]['top']['left']:add(mytaglist[s])
+	screenlayouts[2]['top']['left']:add(mypromptbox[s])
+	screenlayouts[2]['top']['left']:add(spr)
+	-- Widgets that are aligned top middle
+	screenlayouts[2]['top']['center']:add(mytasklist[s])
+	-- Widgets that are aligned top left
+	screenlayouts[2]['top']['right']:add(mylayoutbox[s])
+	-- now bring it all together
+	screenlayouts[s]['top']['layout']:set_left(screenlayouts[2]['top']['left'])
+	screenlayouts[s]['top']['layout']:set_middle(screenlayouts[2]['top']['center'])
+	screenlayouts[s]['top']['layout']:set_right(screenlayouts[2]['top']['right'])
+	screenlayouts[s]['bottom']['layout']:set_left(screenlayouts[2]['bottom']['left'])
+	screenlayouts[s]['bottom']['layout']:set_middle(screenlayouts[2]['bottom']['center'])
+	screenlayouts[s]['bottom']['layout']:set_right(screenlayouts[2]['bottom']['right'])
+
+	topwibox[s]:set_widget(screenlayouts[s]['top']['layout'])
+	bottomwibox[s]:set_widget(screenlayouts[s]['bottom']['layout'])
 end
 -- }}}
 
@@ -581,8 +657,15 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
-	awful.key({ modkey,			  }, "Left",   awful.tag.viewprev		),
-	awful.key({ modkey,			  }, "Right",  awful.tag.viewnext		),
+	-- How to move and resize floaters with the keyboard?
+	-- https://awesome.naquadah.org/wiki/FAQ#How_to_move_and_resize_floaters_with_the_keyboard.3F
+	awful.key({ modkey }, "Next",  function () awful.client.moveresize( 20,  20, -40, -40) end),
+	awful.key({ modkey }, "Prior", function () awful.client.moveresize(-20, -20,  40,  40) end),
+	awful.key({ modkey }, "Down",  function () awful.client.moveresize(  0,  20,   0,   0) end),
+	awful.key({ modkey }, "Up",    function () awful.client.moveresize(  0, -20,   0,   0) end),
+	awful.key({ modkey }, "Left",  function () awful.client.moveresize(-20,   0,   0,   0) end),
+	awful.key({ modkey }, "Right", function () awful.client.moveresize( 20,   0,   0,   0) end),
+
 	awful.key({ modkey,			  }, "Escape", awful.tag.history.restore),
 
 	awful.key({ modkey,			  }, "j",
@@ -613,6 +696,7 @@ globalkeys = awful.util.table.join(
 
 	-- Standard program
 	awful.key({ modkey,			  }, "Return", function () awful.util.spawn(terminal) end),
+	awful.key({ modkey, "Shift"   }, "Return", function () awful.util.spawn(terminal2) end),
 	awful.key({ modkey, "Control" }, "r", awesome.restart),
 	awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
@@ -656,18 +740,33 @@ globalkeys = awful.util.table.join(
 			-- Spotify
 			run_once ("spotify")
 			awful.util.spawn("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")
+
+            -- MPD / Mopidy
+            awful.util.spawn("mpc toggle")
 		end
 	),
 	awful.key({ }, "XF86AudioNext", 
 		function () 
+            -- Clementine
 			-- os.execute("clementine --next")
+            
+            -- Spotify
 			awful.util.spawn("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next") 
+            
+            -- MPD / Mopidy
+            awful.util.spawn("mpc next")
 		end
 	),
-	awful.key({ }, "XF86AudioPrev", 
+	awful.key({ }, "XF86AudioPrev",
 		function ()
+            -- Clementine
 			--os.execute("clementine --previous")
-			awful.util.spawn("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous") 
+            
+            -- Spotify
+			awful.util.spawn("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous")
+
+            -- MPD / Mopidy
+            awful.util.spawn("mpc prev")
 		end
 	),
 	awful.key({ }, "XF86AudioRaiseVolume", 
@@ -835,6 +934,9 @@ awful.rules.rules = {
 	{ rule = { class = "Eclipse" },
 	  properties = { tag = tags[1][8], floating = false } },
 
+	{ rule = { class = "Pidgin" },
+	  properties = { tag = tags[1][4], floating = true } },
+
 	{ rule = { class = "plugin-container"},
 	  properties = {floating = true } },
 
@@ -947,12 +1049,15 @@ run_once("/usr/bin/easystroke")
 --run_once("/usr/bin/gnome-screensaver")
 run_once("/usr/bin/nm-applet")
 --run_once("/usr/bin/pnmixer")
+run_once("pasystray")
 run_once("~/.screenlayout/default.sh")
 run_once("clipit")
---run_once("batti")
---run_once("xfce4-power-manager")
+run_once("batti")
+run_once("xfce4-power-manager")
 --run_once("xfce4-volumed-pulse")
 run_once("/usr/bin/compton --config /home/so/.config/compton.conf -bcCGf -D1")
 run_once("setxkbmap -model pc105 -layout us -variant intl")
 run_once("fluxgui")
+--run_once("redshift-gtk")
+run_once("xfsettingsd")
 -- }}}

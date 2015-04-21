@@ -1,50 +1,32 @@
 set nocompatible               " be iMproved
 filetype off                   " required!
 
-set rtp+=~/.vim/bundle/vundle/
-" set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim/
-call vundle#rc()
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 
 " let Vundle manage Vundle
 " required! 
-Bundle 'gmarik/vundle'
-
-" My Bundles here:
-"
-" original repos on github
-Bundle 'tpope/vim-surround'
-Bundle 'tpope/vim-repeat'
-Bundle 'tpope/vim-fugitive'
-Bundle 'Lokaltog/vim-easymotion'
-Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
-Bundle 'tpope/vim-rails.git'
-Bundle 'Lokaltog/vim-powerline'
-Bundle 'scrooloose/syntastic.git'
-Bundle 'Shutnik/jshint2.vim'
-Bundle "MarcWeber/vim-addon-mw-utils"
-Bundle "tomtom/tlib_vim"
-Bundle "garbas/vim-snipmate"
-Bundle "honza/vim-snippets"
-Bundle "Shougo/vimproc.vim"
-Bundle "Shougo/unite.vim"
-Bundle "m2mdas/phpcomplete-extended"
-Bundle "ervandew/supertab"
-Bundle "kien/ctrlp.vim"
-
-" vim-scripts repos
-Bundle 'L9'
-Bundle 'FuzzyFinder'
-Bundle 'EasyGrep'
-
-" non github repos
-Bundle 'git://git.wincent.com/command-t.git'
-Bundle 'scrooloose/nerdtree'
-"Bundle 'altercation/vim-colors-solarized'
-Bundle 'davidhalter/jedi-vim'
-"Bundle 'klen/python-mode'
+Plugin 'gmarik/Vundle.vim'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-fugitive'
+Plugin 'Lokaltog/vim-powerline'
+Plugin 'scrooloose/syntastic.git'
+Plugin 'kien/ctrlp.vim'
+Plugin 'troydm/zoomwintab.vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'davidhalter/jedi-vim'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'vim-scripts/taglist.vim'
+Plugin 'yegappan/grep'
+call vundle#end()
 
 filetype plugin indent on     " required!
 
+" Turn on omni completion
+" http://vim.wikia.com/wiki/Omni_completion
+filetype plugin on
+set omnifunc=syntaxcomplete#Complete
+"
 " ctrlp
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 
@@ -64,6 +46,8 @@ set shiftwidth=4
 set expandtab
 set autoindent
 set smartindent
+" Do not put hash on first column
+inoremap # X<BS>#
 syntax on
 
 " Highlight whitespaces and tabs
@@ -71,20 +55,8 @@ set list
 set listchars=tab:▸.,trail:·,extends:#,nbsp:.
 
 " Theme settings
-"set background=dark
-"colorscheme solarized
-"let g:molokai_original = 1
-colorscheme mustang
-
-" Syntastic settings
-" Set to C++11
-let g:syntastic_cpp_compiler = 'clang++'
-let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
-
-" Pythonmode settings
-"let g:pymode_lint_checker             = "pylint,pyflakes,pep8"
-"let g:pymode_lint_ignore              = "E203,E272,E221,E251,E202,E271,C0302,W0511,F0401"
-"let g:pymode_folding = 0
+set background=dark
+colorscheme solarized
 
 " GVIM
 set guioptions-=m   " Remove menu bar
@@ -93,33 +65,53 @@ set guioptions-=r   " Remove right-hand scroll bar
 set guioptions-=l   " Remove left-hand scroll bar
 set guioptions+=LlRrb
 set guioptions-=LlRrb
-set guifont=Inconsolata\ 14
+set mouse=a
+set guifont=DejaVu\ Sans\ Mono\ 9
+set number
 
 " Easygrep
 let g:EasyGrepCommand=1
 
 " Supertab
 " http://joncairns.com/2012/05/using-vim-as-a-php-ide/
-let g:SuperTabDefaultCompletionType = ""
+" let g:SuperTabDefaultCompletionType = ""
+" http://vim.wikia.com/wiki/Omni_completion_popup_menu
+let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
 
 " Latex
 "set grepprg=grp\ -nH\ $*
 "let g:tex_flavor = "latex"
+let g:LatexBox_latexmk_preview_continuously = 1
+let g:LatexBox_latexmk_async = 1
 
 " Syntastic
-let g:syntastic_javascript_checkers = ['jslint']
-let g:syntastic_python_checkers = ['pylama']
-let g:syntastic_python_pylama_args='--ignore=E272,E221'
+let g:syntastic_javascript_checkers = ['jshint', 'jscs']
+let g:syntastic_aggregate_errors = 1
+let g:syntastic_python_checkers = ['pep8', 'pylint']
+let g:syntastic_python_pep8_args='--ignore=E272,E221,E241,E251,E402'
 let g:syntastic_haml_checkers = ['haml_lint']
+let g:syntastic_php_checkers = ['']
+" Always set erros to be jumpable with :lnext resp. :lprev
+let g:syntastic_always_populate_loc_list = 1
+" Set to C++11
+let g:syntastic_cpp_compiler = 'clang++'
+let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
 
-" Set working directory to the current file
-" (http://vim.wikia.com/wiki/Set_working_directory_to_the_current_file)
-autocmd BufEnter * silent! lcd %:p:h
+"" Commands
+command Q windo if &buftype == "quickfix" || &buftype == "locationlist" | lclose | endif
+command PythonBreak execute 'normal $oi' | set paste | execute 'normal amport ipdb; ipdb.set_trace()' | set nopaste
 
 "" Key mappings
-" Toggle NERDTree with F2
-" (http://www.catonmat.net/blog/vim-plugins-nerdtree-vim/)
-map <F2> :NERDTreeToggle<CR>
+" Jump to next error
+noremap <F8> :lnext<CR>
+" Jump to previous error
+noremap <S-F8> :lprev<CR>
+
+" Toggle file  with F2
+noremap <F2> :NERDTreeToggle<CR>
+
+" Python breakpoint
+noremap <C-b> :PythonBreak<CR>
 
 " Move tabs with alt + left|right
 nnoremap <silent> <A-Left> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
@@ -128,7 +120,3 @@ nnoremap <silent> <A-Right> :execute 'silent! tabmove ' . tabpagenr()<CR>
 " Automagically execute octave and matlab files when pressing F5
 autocmd FileType octave map <buffer> <F5> ggOpkg load all<esc>Gopause<esc>:w<cr>:!octave -qf %<cr>ddggdd:w<cr>
 autocmd FileType matlab map <buffer> <F5> ggOpkg load all<esc>Gopause<esc>:w<cr>:!octave -qf %<cr>ddggdd:w<cr>
-
-" Mappings for SingleCompile
-nmap <F9> :SCCompile<cr>
-nmap <F10> :SCCompileRun<cr>

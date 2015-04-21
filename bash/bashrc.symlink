@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 
+# TERM
+export TERM="xterm-256color"
+
 # PATH
 export PATH=$PATH:$HOME/bin
 export PATH="/usr/lib/colorgcc/bin:$PATH"
+export PATH=$JAVA_HOME/bin:$PATH
+
 
 # SSH agent
 SSH_ENV="$HOME/.ssh/environment"
@@ -30,7 +35,7 @@ fi
 
 # Stuff for P2P-MPI
 export P2PMPI_HOME=/opt/p2pmpi
-export PATH=$PATH:$P2PMPI_HOME/bin
+ export PATH=$PATH:$P2PMPI_HOME/bin
 
 # Powerline
 #. /home/sosterwalder/.local/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh
@@ -99,12 +104,16 @@ alias git='HOME=$RMUXDIR git'
 
 export -f __git_ps1
 export PATH="$PATH:$RMUXDIR/bin"
-
 export PS1="\[\033[00;32m\]\u\[\033[00;37m\]@\h \[\033[00;34m\]\w [\$(ls -1 | wc -l | sed 's: ::g') files, \$(${gprfx}ls -lah | ${gprfx}grep -m 1 total | ${gprfx}sed 's/total //')] \$(__git_ps1  )\n\[\033[00;33m\]$> \[\033[00m\]"
 
 # Aliases
+alias ls="ls++ --potsf"
 alias ll="ls -lh"
 alias la="ls -lah"
+alias gp="grep -Hnri --color=auto"
+alias stdpy2="source /home/sosterwalder/.stdpy2/bin/activate"
+alias stdpy3="source /home/sosterwalder/.stdpy3/bin/activate"
+alias jump="rmux sveno@srsyg20.sygroup.ch"
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -117,10 +126,6 @@ if ! shopt -oq posix; then
     fi
 fi
 
-# Start TMUX
-#if test -z $TMUX && [[ $TERM != "screen" ]]; then
-#    exec tmux
-#fi
 # Powerline
 # if [ -f ~/.local/lib/python2.7/site-packages/powerline/bindings/bash/powerline.sh ]; then
 #     #source ~/.local/lib/python2.7/site-packages/powerline/bindings/bash/powerline.sh
@@ -130,7 +135,10 @@ if [ -f /etc/bash_completion ]; then
  . /etc/bash_completion
 fi
 
-# Start TMUX
-if test -z $TMUX && [[ $TERM != "screen" ]]; then
-    exec tmux
-fi
+# VI input mode
+set -o vi
+
+unset SSH_ASKPASS
+eval $(dircolors -b $HOME/.dircolors)
+
+export NVIM_TUI_ENABLE_TRUE_COLOR=1
