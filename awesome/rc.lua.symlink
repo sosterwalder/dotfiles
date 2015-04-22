@@ -1057,7 +1057,6 @@ run_once("xfce4-power-manager")
 --run_once("xfce4-volumed-pulse")
 run_once("/usr/bin/compton --config /home/so/.config/compton.conf -bcCGf -D1")
 run_once("setxkbmap -model pc105 -layout us -variant intl")
-run_once("fluxgui")
 --run_once("redshift-gtk")
 run_once("xfsettingsd")
 -- }}}
